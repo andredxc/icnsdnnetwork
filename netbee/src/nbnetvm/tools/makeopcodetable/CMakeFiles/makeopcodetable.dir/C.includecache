@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/osboxes/netbee/src/nbnetvm/tools/makeopcodetable/makeopcodetable.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+stdint.h
+-
+

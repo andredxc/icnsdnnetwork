@@ -1,0 +1,1 @@
+/usr/bin/cc  -fPIC   -shared -Wl,-soname,libnbsockutils.so -o libnbsockutils.so CMakeFiles/nbsockutils.dir/__/nbee/globals/debug.c.o CMakeFiles/nbsockutils.dir/__/nbee/globals/utils.c.o CMakeFiles/nbsockutils.dir/sockutils.c.o 

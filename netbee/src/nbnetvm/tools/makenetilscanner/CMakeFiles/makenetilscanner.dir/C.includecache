@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/osboxes/netbee/src/nbnetvm/tools/makenetilscanner/makenetilscanner.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+

@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/makeopcodetable.dir/makeopcodetable.c.o  -o makeopcodetable -rdynamic 

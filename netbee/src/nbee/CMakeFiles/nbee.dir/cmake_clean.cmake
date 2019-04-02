@@ -1,0 +1,42 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/nbee.dir/globals/debug.c.o"
+  "CMakeFiles/nbee.dir/globals/utils.c.o"
+  "CMakeFiles/nbee.dir/globals/profiling.cpp.o"
+  "CMakeFiles/nbee.dir/globals/profiling-functions.c.o"
+  "CMakeFiles/nbee.dir/decoder/netpdldecoder.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/netpdldecoderutils.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/netpdlexpression.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/netpdllookuptables.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/netpdlprotodecoder.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/netpdlstandardvars.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/netpdlvariables.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/pdmlmaker.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/pdmlreader.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/psmlmaker.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/psmlreader.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/pxmlreader.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/decoderplugin/decoder_plugin.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/decoderplugin/decoder_dnsdomainname.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/showplugin/show_plugin.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/showplugin/show_ip46name.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/showplugin/show_dnsdomainname.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/showplugin/show_netbiosname.cpp.o"
+  "CMakeFiles/nbee.dir/decoder/showplugin/native_showfunctions.cpp.o"
+  "CMakeFiles/nbee.dir/misc/os_utils.cpp.o"
+  "CMakeFiles/nbee.dir/misc/exports.cpp.o"
+  "CMakeFiles/nbee.dir/misc/initialize.cpp.o"
+  "CMakeFiles/nbee.dir/misc/update_netpdlfile.cpp.o"
+  "CMakeFiles/nbee.dir/nbpacketengine/nbpacketengine.cpp.o"
+  "CMakeFiles/nbee.dir/nbpacketengine/fieldreader.cpp.o"
+  "CMakeFiles/nbee.dir/packetprocessing/packetdumpfile.cpp.o"
+  "CMakeFiles/nbee.dir/packetprocessing/packet_pcapdumpfile.cpp.o"
+  "CMakeFiles/nbee.dir/utils/asciibuffer.cpp.o"
+  "CMakeFiles/nbee.dir/utils/netpdlutils.c.o"
+  "libnbee.pdb"
+  "libnbee.so"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C CXX)
+  include(CMakeFiles/nbee.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

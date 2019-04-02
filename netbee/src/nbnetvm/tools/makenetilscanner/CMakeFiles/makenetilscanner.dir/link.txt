@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/makenetilscanner.dir/makenetilscanner.c.o  -o makenetilscanner -rdynamic 
