@@ -71,7 +71,7 @@ nfdc route add vehicle udp://10.0.0.7
 This initialization has to be executed to each host. The script [execution scripts/setup_experiment.py](https://github.com/gabrielmleal/icnsdnnetwork/blob/master/execution%20scripts/setup_experiment.py) is able to set all this configuration to the topology present on [execution scripts/topology.mnndn](https://github.com/gabrielmleal/icnsdnnetwork/blob/master/execution%20scripts/topology.mnndn).
 
 ### 4. Command and control/application
-Now that the network and the controller have started, it is possible to forward packets between hosts. The program on the mini-ndn/ndn-cxx/examples/masterwork.cpp shows how it can be done using the NDN library.
+Now that the network and the controller have started, it is possible to forward packets between hosts. The program on the mini-ndn/ndn-cxx/examples/masterwork.cpp shows how it can be done using the NDN library. (Soon it'll be added the mini-ndn folder, currently this program is on [execution scripts/masterwork.cpp](https://github.com/gabrielmleal/icnsdnnetwork/blob/master/execution%20scripts/masterwork.cpp)
 
 It is possible to execute for example:
 
