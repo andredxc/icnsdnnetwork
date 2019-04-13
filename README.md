@@ -14,10 +14,10 @@ The switches have to be programmable so they can process forwarding by name, and
 ### 2. NDN Hosts
 The NDN hosts are defined by the NDN packet format, and works within the minindn. But ICN doesn't run using location, and something has to be done to forward the packets. It is possible to map names to some network interface, or IP, or even a socket using the [nfdc](https://named-data.net/doc/NFD/current/manpages/nfdc.html). 
 For example, run in your terminal with a ndn host ready:
-´´´
+```
 nfdc face create udp://<ip>:<port>
 nfdc route add <name> udp://<ip>:<port>
-´´´
+```
   
 Those commands will forward every name to the ip and port previsouly set.
 
@@ -29,3 +29,13 @@ ICN are networks that maps the content based on their name, not their location, 
 
 ## Setup and running
 
+### 1. Initializing the controller
+Initialize the controller program you want to apply the filter rules:
+
+```
+ryu-manager --observe-links icn_sdn.py
+```
+
+PS: it is important the --observe-links since it helps to track new switches dinamically entering the network.
+
+### 2. Initializing the topology and minindn
