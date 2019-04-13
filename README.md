@@ -39,3 +39,50 @@ ryu-manager --observe-links icn_sdn.py
 PS: it is important the --observe-links since it helps to track new switches dinamically entering the network.
 
 ### 2. Initializing the topology and minindn
+There are two different options to initialize the minindn network and topology:
+
+```
+sudo minindn
+```
+This command will initialize with a default topology set by the minindn, but it is also possible to use some ready topologies from minindn. (Details about minindn can be found [here](https://github.com/named-data/mini-ndn))
+
+Also it is possible to construct your own topology, and it is possible to save or load them using
+
+```
+sudo minindnedit
+```
+
+The topology example for this work can be found on [execution scripts/topology.mnndn](https://github.com/gabrielmleal/icnsdnnetwork/blob/master/execution%20scripts/topology.mnndn)
+
+### 3. Getting ready the ARP and faces (name-IP,port forwarding)
+
+Using the controler program [ryu/bin/icn_sdn.py](https://github.com/gabrielmleal/icnsdnnetwork/blob/master/ryu/bin/icn_sdn.py) it is necessary to ping at least one time to map the MAC to IP to all the network, i.e. setup the ARP table.
+
+In this work all names are mapped to an arbitrary face (IP), since it only have to reach a switch. When the switch detects packet-in the controller knows to forward optimally accordingly with the network current status and the object name. So it is possible to initialize the forwarding rules as follow:
+
+```
+nfdc face create udp://10.0.0.7
+nfdc route add drone udp://10.0.0.7
+nfdc route add human udp://10.0.0.7
+nfdc route add sensor udp://10.0.0.7
+nfdc route add vehicle udp://10.0.0.7
+```
+
+This initialization has to be executed to each host. The script [execution scripts/setup_experiment.py](https://github.com/gabrielmleal/icnsdnnetwork/blob/master/execution%20scripts/setup_experiment.py) is able to set all this configuration to the topology present on [execution scripts/topology.mnndn](https://github.com/gabrielmleal/icnsdnnetwork/blob/master/execution%20scripts/topology.mnndn).
+
+### 4. Command and control/application
+Now that the network and the controller have started, it is possible to forward packets between hosts. The program on the mini-ndn/ndn-cxx/examples/masterwork.cpp shows how it can be done using the NDN library.
+
+It is possible to execute for example:
+
+#### On a drone execute:
+```
+./master_work.cpp producer drone 1
+```
+
+#### On another any device execute:
+```
+./master_work.cpp consumer drone 1
+```
+
+It will be able to communicate between 2 NDN hosts using only the name "drone".
