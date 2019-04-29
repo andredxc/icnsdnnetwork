@@ -21,9 +21,13 @@ from ryu.lib.packet import icmp
 
 from ryu.app.wsgi import ControllerBase
 
+from ryu.app.ofctl.api import get_datapath
+
 import networkx as nx
 
 import os
+import threading
+import time
 
 class IcnSdnApp(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -38,78 +42,41 @@ class IcnSdnApp(app_manager.RyuApp):
         self.links = {}
         self.no_of_nodes = 0
         self.no_of_links = 0
-        self.i=0
         self.drones = []
         self.humans = []
         self.sensors = []
         self.vehicles = []
         self.registered_data = {}
+        self.packet_in_count = 0
+        self.hierarchy_filtered_count = 0
+        self.size_filtered_count = 0
+        self.filterEnabled = False
+
+        # Bandwidth statistics
+        self.ports_stats = {}
+
+        # Command and control configurations
+        self.hierarchy = { 'vehicle' : 1, 'human' : 2, 'drone' : 3, 'sensor' : 4 }
+
+        thread = threading.Thread( target = self.updateListsAndPorts )
+        thread.start()
+
+    def updateListsAndPorts( self ):
+        while True:
+            time.sleep(5)
+            links_list = get_link(self.topology_api_app, None)
+            links=[(link.src.dpid,link.dst.dpid,{'port':link.src.port_no}) for link in links_list]
+            self.net.add_edges_from(links)
+            links=[(link.dst.dpid,link.src.dpid,{'port':link.dst.port_no}) for link in links_list]
+            self.net.add_edges_from(links)
+
+            for datapathid, port in self.ports_stats.iteritems():
+                    self.send_port_stats_request(get_datapath(self, datapathid))
+
+            print 'Update lists and ports'
 
 
-    #Parte do arp
-    def receive_arp(self, datapath, packet, etherFrame, inPort):
-        arpPacket = packet.get_protocol(arp.arp)
 
-        arp_dstIp = arpPacket.dst_ip
-        if arpPacket.opcode == 1:
-            #caso seja um ARP Request, tenta responder a solicitacao
-            self.logger.debug("receive ARP request %s => %s (port%d) IP: %s"
-                       %(etherFrame.src, etherFrame.dst, inPort, arp_dstIp))
-            #self.Fluxo.set_mac_host(arpPacket.src_ip, etherFrame.src)
-            if arpPacket.src_ip not in self.ip_mac.keys():
-                self.ip_mac[arpPacket.src_ip] = etherFrame.src
-            if arpPacket.dst_ip in self.ip_mac.keys():
-                self.reply_arp(datapath, etherFrame, arpPacket, arp_dstIp, inPort)
-
-        elif arpPacket.opcode == 2:
-            #Caso seja um ARP Reply, ignora.
-            self.logger.debug("receive ARP reply %s => %s (port%d) IP: %s"
-                       %(etherFrame.src, etherFrame.dst, inPort, arp_dstIp))
-
-
-
-    def reply_arp(self, datapath, etherFrame, arpPacket, arp_dstIp, inPort):
-        dstIp = arpPacket.src_ip
-        srcIp = arpPacket.dst_ip
-        dstMac = etherFrame.src
-
-        
-        srcMac = self.ip_mac[arp_dstIp]
-        outPort = inPort
-        for ips in self.ip_mac:
-            print (ips, self.ip_mac[ips])
-        print '----------------------------------'
-        #Chamada da funcao para criar um ARP reply e enviar para o host
-        self.send_arp(datapath, 2, srcMac, srcIp, dstMac, dstIp, outPort)
-        self.logger.debug("send ARP reply %s => %s (port%d)\n" %(srcMac, dstMac, outPort))
-        
-
-        #Funcao para criar um ARP reply e envia-lo para o host que fez a solicitacao.
-    def send_arp(self, datapath, opcode, srcMac, srcIp, dstMac, dstIp, outPort):
-        if opcode == 1:
-            targetMac = "00:00:00:00:00:00"
-            targetIp = dstIp
-        elif opcode == 2:
-            targetMac = dstMac
-            targetIp = dstIp
-
-        #Cria o pacote ethernet
-        e = ethernet.ethernet(dstMac, srcMac, ether.ETH_TYPE_ARP)
-        #Cria o pacote arp
-        a = arp.arp(1,  0x0800, 6, 4, opcode, srcMac, srcIp, targetMac, targetIp)
-        p = packet.Packet()
-        p.add_protocol(e)
-        p.add_protocol(a)
-        p.serialize()
-        #Cria ainstrucao de saida. Enviar o ARP Reply pela porta de entrada do ARP Request
-        actions = [datapath.ofproto_parser.OFPActionOutput(outPort, 0)]
-        out = datapath.ofproto_parser.OFPPacketOut(
-            datapath=datapath,
-            buffer_id=0xffffffff,
-            in_port=datapath.ofproto.OFPP_CONTROLLER,
-            actions=actions,
-            data=p.data)
-        datapath.send_msg(out) #Envia para  o switch a instrucao.
 
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     def packet_in_handler(self, ev):
@@ -128,13 +95,12 @@ class IcnSdnApp(app_manager.RyuApp):
         dpid = datapath.id
         self.mac_to_port.setdefault(dpid, {})
 
-
         if src not in self.net:
             self.net.add_node(src)
             self.net.add_edge(dpid,src, port = in_port)
             self.net.add_edge(src,dpid)
         if dst in self.net:
-            path=nx.shortest_path(self.net,src,dst)
+            path=nx.shortest_path(self.net,dpid,dst)
             next=path[path.index(dpid)+1]
             out_port=self.net[dpid][next]['port']
         else:
@@ -153,73 +119,120 @@ class IcnSdnApp(app_manager.RyuApp):
                 ip = pkt.get_protocol(ipv4.ipv4)
                 ipdst = ip.dst
                 ipsrc = ip.src
-                # print ipsrc, " ", ipdst
                 pkt_udp = pkt.get_protocol(udp.udp)
                 pkt_icmp = pkt.get_protocol(icmp.icmp)
+                byte_size = 0
                 if pkt_udp:
-                    if pkt[-1].find( "controladddrone", 0) == 6:
+                    print "Content: {}".format(pkt[-1])
+                    if pkt[-1].find( "controladddroneinterest", 0) == 6:
                         if ipsrc not in self.drones:
                             self.drones.append(ipsrc)
                             print "drone added "+ipsrc
                         return 0
-                    elif pkt[-1].find( "controladdhuman", 0) == 6:
+                    elif pkt[-1].find( "controladdhumaninterest", 0) == 6:
                         if ipsrc not in self.humans:
                             self.humans.append(ipsrc)
                             print "human added "+ipsrc
                         return 0
-                    elif pkt[-1].find( "controladdvehicle", 0) == 6:
+                    elif pkt[-1].find( "controladdvehicleinterest", 0) == 6:
                         if ipsrc not in self.vehicles:
                             self.vehicles.append(ipsrc)
                             print "vehicle added "+ipsrc
                         return 0
-                    elif pkt[-1].find( "controladdsensor", 0) == 6:
+                    elif pkt[-1].find( "controladdsensorinterest", 0) == 6:
                         if ipsrc not in self.sensors:
                             self.sensors.append(ipsrc)
                             print "sensor added "+ipsrc
                         return 0
                     elif pkt[-1].find( "drone", 0) == 6 or pkt[-1].find( "sensor", 0) == 6 or pkt[-1].find( "vehicle", 0) == 6 or pkt[-1].find( "human", 0) == 6:
                         if pkt[-1].find( "drone", 0) == 6:
-                            bpfOfpmatch = BPFMatch(0, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, "drone")
+                            currType = "drone"
+                            bpfOfpmatch = BPFMatch(0, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, "/droneinterest")
+                            byte_size = 15 * 1024 * 1024 # 15 MB
                             target = self.drones
                         elif pkt[-1].find( "sensor", 0) == 6:
-                            bpfOfpmatch = BPFMatch(0, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, "sensor")
+                            currType = "sensor"
+                            bpfOfpmatch = BPFMatch(0, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, "/sensorinterest")
+                            byte_size = 10 * 1024 *1024 # 10 MB
                             target = self.sensors
                         elif pkt[-1].find( "vehicle", 0) == 6:
-                            bpfOfpmatch = BPFMatch(0, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, "vehicle")
+                            currType = "vehicle"
+                            bpfOfpmatch = BPFMatch(0, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, "/vehicleinterest")
+                            byte_size = 50 * 1024 * 1024 # 50 MB
                             target = self.vehicles
                         elif pkt[-1].find( "human", 0) == 6:
-                            bpfOfpmatch = BPFMatch(0, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, "human")
+                            currType = "human"
+                            bpfOfpmatch = BPFMatch(0, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, "/humaninterest")
+                            byte_size = 1 * 1024 * 1024 # 1 MB
                             target = self.humans
-                        shortest = 999999
+                        if ip.total_length > byte_size :
+
+                            self.size_filtered_count += 1
+                            print 'PACKET not permitted: size is {} and it should be lesser than {}.'.format(ip.total_length, byte_size)
+                            return
+                        # ------------------ Comeco de controle de hierarquia ---------------------
+                        assets = { 'vehicle' : self.vehicles, 'human' : self.humans, 'drone' : self.drones,  'sensor' : self.sensors }
+                        for assetType, asset in assets.iteritems():
+                            for ip in asset:
+                                if ip == ipsrc:
+                                    print assetType + ' is sending an INTEREST for a ' + currType
+                                    if self.hierarchy[assetType] > self.hierarchy[currType]:
+                                        self.hierarchy_filtered_count += 1
+                                        print 'INTEREST forbidden.'
+                                        return
+                        # ------------------ Fim de controle de hierarquia ---------------------
+                        shortest = float('inf')
+                        curr_bytes = float('inf')
                         ip_shortest = ""
                         new_out_port = 1
-                        print '--------------ips--------------'
+                        print '-------------- ' + currType + ' ips--------------'
                         for element in target:
                             print element
-                        print '-------------------------------'
-
+                        print '------------------------------------------'
                         for element in target:
-                            if element == ipsrc:
-                                continue
-                            aux = nx.shortest_path_length(self.net, src, self.ip_mac[element])
-                            path = nx.shortest_path(self.net, src, self.ip_mac[element])
-                            if aux < shortest:
-                                shortest = aux
-                                ip_shortest = element
-                                print "Shortest path ip is "+ip_shortest
-                                new_out_port = self.net[dpid][path[path.index(dpid)+1]]['port']
+                            aux = nx.shortest_path_length(self.net, dpid, self.ip_mac[element])
+                            path = nx.shortest_path(self.net, dpid, self.ip_mac[element])
+                            paths = nx.all_shortest_paths(self.net, dpid, self.ip_mac[element])
+                            if aux <= shortest:
+                                local_bytes = float('inf')
+                                for p in paths:
+                                    sumbytes = 0
+                                    curr_id = 0
+                                    counter = 0
+                                    for dp_id in p:
+                                        if dp_id == src and counter != len(p)-1:
+                                            continue
+                                        if dp_id == self.ip_mac[element]:
+                                            break
+                                        dstport = self.net[dp_id][p[p.index(dp_id)+1]]['port']
+                                        sumbytes += self.ports_stats[dp_id][dstport]
+                                        counter += 1
+                                    print p
+                                    print "sumbytes ateh o elemento {} eh de {} bytes.".format(element, sumbytes)
+                                    if sumbytes < local_bytes:
+                                        local_bytes = sumbytes
+                                        path = p
+                                if local_bytes < curr_bytes:
+                                    curr_bytes = local_bytes
+                                    shortest = aux
+                                    ip_shortest = element
+                                    if len(path) > 1:
+                                        new_out_port = self.net[dpid][path[path.index(dpid)+1]]['port']
+                                    else:
+                                        new_out_port = self.net[dpid][src]['port']
+                                        print 'inport: {}, outport: {}, ip: {}.'.format(in_port, new_out_port, ip_shortest)
                         if not ip_shortest:
                             return
-                        match = datapath.ofproto_parser.OFPMatch(in_port=in_port, ipv4_src=ipsrc, eth_dst=dst, exec_bpf=bpfOfpmatch)
+                        match = parser.OFPMatch(in_port=in_port, eth_dst=dst)
                         actions = [
                             parser.OFPActionSetField(eth_dst=self.ip_mac[ip_shortest]),
                             parser.OFPActionSetField(ipv4_dst=ip_shortest),
-                            parser.OFPActionOutput(new_out_port)
+                            parser.OFPActionOutput(new_out_port),
                         ]
-                        self.add_flow(datapath, in_port, dst, match, actions)
+                        self.add_flow(datapath, in_port, match, actions)
                 elif not pkt_icmp:
                     match = datapath.ofproto_parser.OFPMatch(in_port=in_port, eth_dst=dst)
-                    self.add_flow(datapath, in_port, dst, match, actions)
+                    self.add_flow(datapath, in_port, match, actions)
 
 
         out = datapath.ofproto_parser.OFPPacketOut(
@@ -253,15 +266,36 @@ class IcnSdnApp(app_manager.RyuApp):
         self.send_bpf_program(datapath, 0, f.read())
 
 
+    def send_port_stats_request(self, datapath):
+        ofp = datapath.ofproto
+        ofp_parser = datapath.ofproto_parser
+
+        req = ofp_parser.OFPPortStatsRequest(datapath, 0, ofp.OFPP_ANY)
+        datapath.send_msg(req)
+
+
+    @set_ev_cls(ofp_event.EventOFPPortStatsReply, MAIN_DISPATCHER)
+    def port_stats_reply_handler(self, ev):
+        dpid = ev.msg.datapath.id
+        for stat in ev.msg.body:
+            port = stat.port_no
+            self.ports_stats[dpid][port] = stat.tx_bytes
+
+
     @set_ev_cls(event.EventSwitchEnter)
     def get_topology_data(self, ev):
        switch_list = get_switch(self.topology_api_app, None)  
        switches=[switch.dp.id for switch in switch_list]
        self.net.add_nodes_from(switches)
+
+       for switch_id in switches:
+            self.ports_stats.setdefault( switch_id, {} )
        
        print "**********List of switches"
        for switch in switch_list:
-         print switch
+         print switch.dp.id
+         links_list = get_link(self.topology_api_app, switch.dp.id)
+         print links_list
       
        links_list = get_link(self.topology_api_app, None)
        links=[(link.src.dpid,link.dst.dpid,{'port':link.src.port_no}) for link in links_list]
@@ -287,16 +321,18 @@ class IcnSdnApp(app_manager.RyuApp):
         datapath.send_msg(msg)
 
 
-    def add_flow(self, datapath, in_port, dst, match, actions):
+    def add_flow(self, datapath, in_port, match, actions):
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser      
         inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)] 
         mod = datapath.ofproto_parser.OFPFlowMod(
            datapath=datapath, match=match, cookie=0,
            command=ofproto.OFPFC_ADD, idle_timeout=0, hard_timeout=5,
-           priority=ofproto.OFP_DEFAULT_PRIORITY, instructions=inst
+           priority=1, instructions=inst
            )
         datapath.send_msg(mod)
+
+
 
 
     def remove_table_flows(self, datapath, table_id, match, instructions):
@@ -304,3 +340,66 @@ class IcnSdnApp(app_manager.RyuApp):
         ofproto = datapath.ofproto
         flow_mod = datapath.ofproto_parser.OFPFlowMod(datapath, 0, 0, table_id, ofproto.OFPFC_DELETE, 0, 0, 1, ofproto.OFPCML_NO_BUFFER, ofproto.OFPP_ANY, ofproto.OFPG_ANY, 0, match, instructions)
         return flow_mod
+
+
+    #Parte do arp
+    def receive_arp(self, datapath, packet, etherFrame, inPort):
+        arpPacket = packet.get_protocol(arp.arp)
+
+        arp_dstIp = arpPacket.dst_ip
+        if arpPacket.opcode == 1:
+            #caso seja um ARP Request, tenta responder a solicitacao
+            self.logger.debug("receive ARP request %s => %s (port%d) IP: %s"
+                       %(etherFrame.src, etherFrame.dst, inPort, arp_dstIp))
+            #self.Fluxo.set_mac_host(arpPacket.src_ip, etherFrame.src)
+            if arpPacket.src_ip not in self.ip_mac.keys():
+                self.ip_mac[arpPacket.src_ip] = etherFrame.src
+            if arpPacket.dst_ip in self.ip_mac.keys():
+                self.reply_arp(datapath, etherFrame, arpPacket, arp_dstIp, inPort)
+
+        elif arpPacket.opcode == 2:
+            #Caso seja um ARP Reply, ignora.
+            self.logger.debug("receive ARP reply %s => %s (port%d) IP: %s"
+                       %(etherFrame.src, etherFrame.dst, inPort, arp_dstIp))
+
+
+
+    def reply_arp(self, datapath, etherFrame, arpPacket, arp_dstIp, inPort):
+        dstIp = arpPacket.src_ip
+        srcIp = arpPacket.dst_ip
+        dstMac = etherFrame.src
+
+        
+        srcMac = self.ip_mac[arp_dstIp]
+        outPort = inPort
+        #Chamada da funcao para criar um ARP reply e enviar para o host
+        self.send_arp(datapath, 2, srcMac, srcIp, dstMac, dstIp, outPort)
+        self.logger.debug("send ARP reply %s => %s (port%d)\n" %(srcMac, dstMac, outPort))
+        
+
+        #Funcao para criar um ARP reply e envia-lo para o host que fez a solicitacao.
+    def send_arp(self, datapath, opcode, srcMac, srcIp, dstMac, dstIp, outPort):
+        if opcode == 1:
+            targetMac = "00:00:00:00:00:00"
+            targetIp = dstIp
+        elif opcode == 2:
+            targetMac = dstMac
+            targetIp = dstIp
+
+        #Cria o pacote ethernet
+        e = ethernet.ethernet(dstMac, srcMac, ether.ETH_TYPE_ARP)
+        #Cria o pacote arp
+        a = arp.arp(1,  0x0800, 6, 4, opcode, srcMac, srcIp, targetMac, targetIp)
+        p = packet.Packet()
+        p.add_protocol(e)
+        p.add_protocol(a)
+        p.serialize()
+        #Cria ainstrucao de saida. Enviar o ARP Reply pela porta de entrada do ARP Request
+        actions = [datapath.ofproto_parser.OFPActionOutput(outPort, 0)]
+        out = datapath.ofproto_parser.OFPPacketOut(
+            datapath=datapath,
+            buffer_id=0xffffffff,
+            in_port=datapath.ofproto.OFPP_CONTROLLER,
+            actions=actions,
+            data=p.data)
+        datapath.send_msg(out) #Envia para  o switch a instrucao.

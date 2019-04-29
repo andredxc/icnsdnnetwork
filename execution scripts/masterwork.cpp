@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <thread>
+#include <string>
 #include <string.h>
 
 bool initialized = false;
@@ -15,8 +16,14 @@ namespace examples {
 class Consumer : noncopyable
 {
 public:
+
+  Consumer( bool cached )
+  {
+    cached_ = cached;
+  }
+
   float
-  run(std::string param);
+  run( std::string param );
 
 private:
   void
@@ -29,12 +36,17 @@ private:
 private:
   Face m_face;
   std::string parameter = "";
+  bool cached_ = false;
 };
 
 
 class Producer : noncopyable
 {
 public:
+  Producer (bool cached = false )
+  { 
+    cached_ = cached;
+  }
   void
   registerData(Data d)
   {
@@ -46,28 +58,18 @@ public:
   {
     if( !initialized )
     {
-      ndn::examples::Consumer consumer;
-      auto ithread = std::thread(&ndn::examples::Consumer::run, &consumer, "controladd"+param);
+      ndn::examples::Consumer consumer( false );
+      std::string type = "controladd";
+      if ( cached_ )
+        type += "cached";
+      auto ithread = std::thread(&ndn::examples::Consumer::run, &consumer, type+param);
       ithread.join();
       initialized = true;
     }
-    if (data_ != nullptr)
-    {
-      param = "";
-      std::ostringstream os;
-      if (data_->getName().empty()) {
-      os << "/";
-      }
-      else {
-        for (const auto& component : data_->getName()) {
-          os << "/";
-          component.toUri(os);
-        }
-      }
-      param = os.str();
-    }
 
-    m_face.setInterestFilter("/"+param +"/",
+    // std::cout << "Novo interesse :" << "/" << param << "interest/" << std::endl;
+
+    m_face.setInterestFilter("/"+param+"interest/",
                              bind(&Producer::onInterest, this, _1, _2),
                              RegisterPrefixSuccessCallback(),
                              bind(&Producer::onRegisterFailed, this, _1, _2));
@@ -78,12 +80,12 @@ private:
   void
   onInterest(const InterestFilter& filter, const Interest& interest)
   {
-    std::cout << "<< I: " << interest << std::endl;
+    // std::cout << "<< I: " << interest << std::endl;
 
     // Create new name, based on Interest's name
     Name dataName(interest.getName());
     dataName
-      .append("testApp") // add "testApp" component to Interest name
+      .append("data") // add "testApp" component to Interest name
       .appendVersion();  // add "version" component (current UNIX timestamp in milliseconds)
 
     if ( data_ == nullptr ){
@@ -92,7 +94,7 @@ private:
       // Create Data packet
       data_ = make_shared<Data>();
       data_->setName(dataName);
-      data_->setFreshnessPeriod(0_s); // 10 seconds
+      data_->setFreshnessPeriod(1000_s); // 10 seconds
       data_->setContent(reinterpret_cast<const uint8_t*>(content.data()), content.size());
     }
 
@@ -102,7 +104,7 @@ private:
     // m_keyChain.sign(data, <certificate>);
 
     // Return Data packet to the requester
-    std::cout << ">> D: " << *data_ << std::endl;
+    // std::cout << ">> D: " << *data_ << std::endl;
     m_face.put(*data_);
   }
 
@@ -121,15 +123,19 @@ private:
   KeyChain m_keyChain;
   std::thread ithread;
   std::shared_ptr<Data> data_;
+  bool cached_ = false;
 };
 
 float
-Consumer::run(std::string param = "")
+Consumer::run( std::string param = "" )
 {
   if( !param.empty() )
     parameter = param;
-  Interest interest(Name("/"+param));
-  interest.setInterestLifetime(2_s); // 2 seconds
+  Interest interest(Name("/"+param+"interest"));
+  if (param.find("controladd") != std::string::npos)
+    interest.setInterestLifetime(0_s); // 0 seconds
+  else
+    interest.setInterestLifetime(1_s); // 2 seconds
   interest.setCanBePrefix(true);
   interest.setMustBeFresh(true);
 
@@ -139,39 +145,43 @@ Consumer::run(std::string param = "")
                          bind(&Consumer::onNack, this, _1, _2),
                          bind(&Consumer::onTimeout, this, _1));
 
-  std::cout << "Sending " << interest << std::endl;
+  // std::cout << "Sending " << interest << std::endl;
 
   // processEvents will block until the requested data received or timeout occurs
   m_face.processEvents();
   std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
   auto time_diff = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
 
-  std::cout << "Time:" << time_diff << std::endl;
+  if (param.find("controladd") == std::string::npos)
+    std::cout << time_diff << std::endl;
   return time_diff;
 }
 
 void
 Consumer::onData(const Interest& interest, const Data& data)
 {
-  std::cout << data << std::endl;
-  // ndn::examples::Producer producer;
-  // producer.registerData(data);
-
-  // auto ithread = std::thread(&ndn::examples::Producer::run, &producer, parameter);
-  // ithread.join();
+  // std::cout << data << std::endl;
+  if ( cached_ )
+  {
+    ndn::examples::Producer producer( true );
+    producer.registerData(data);
+  
+    auto ithread = std::thread(&ndn::examples::Producer::run, &producer, parameter);
+    ithread.join();
+  }
 }
 
 void
 Consumer::onNack(const Interest& interest, const lp::Nack& nack)
 {
-  std::cout << "received Nack with reason " << nack.getReason()
-            << " for interest " << interest << std::endl;
+  // std::cout << "received Nack with reason " << nack.getReason()
+            // << " for interest " << interest << std::endl;
 }
 
 void
 Consumer::onTimeout(const Interest& interest)
 {
-  std::cout << "Timeout " << interest << std::endl;
+  // std::cout << "Timeout " << interest << std::endl;
 }
 
 } // namespace examples
@@ -180,8 +190,6 @@ Consumer::onTimeout(const Interest& interest)
 int
 main(int argc, char** argv)
 {
-  ndn::examples::Producer producer;
-  ndn::examples::Consumer consumer;
 
   try {
     if ( argc > 1 )
@@ -189,6 +197,15 @@ main(int argc, char** argv)
       std::string type(argv[1]);
       std::string param(argv[2]);
       int times = std::stoi(argv[3]);
+      std::string str_cached(argv[4] == NULL ? "" : argv[4] );
+
+      bool cached = false;
+      if( str_cached == "cached" )
+        cached = true;
+
+      ndn::examples::Producer producer;
+      ndn::examples::Consumer consumer( cached );
+
       for(int i=0;i<times;i++)
       {
         std::thread ithread;
@@ -197,7 +214,7 @@ main(int argc, char** argv)
         else if (type == "consumer")
           ithread = std::thread(&ndn::examples::Consumer::run, &consumer, param);
 
-        std::cout << type << " " << param << std::endl;
+        // std::cout << type << " " << param << std::endl;
 
         ithread.join();
       }
