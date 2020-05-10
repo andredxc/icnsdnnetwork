@@ -86,3 +86,15 @@ It is possible to execute for example:
 ```
 
 It will be able to communicate between 2 NDN hosts using only the name "drone".
+
+
+#### André's instructions
+
+Some of the packages needed: g++, python-sphinx and libboost-all
+
+Installation order:
+    ndn-cxx (version 0.6.2)
+    NFD (version 0.6.2)
+    ChronoSync (vesion 0.5.1)
+    NLSR (version 0.4.3)
+    
