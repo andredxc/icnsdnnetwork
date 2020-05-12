@@ -90,7 +90,7 @@ It will be able to communicate between 2 NDN hosts using only the name "drone".
 
 #### André's instructions
 
-Some of the packages needed: g++, python-sphinx and libboost-all
+Some of the packages needed: g++, python-sphinx, libboost-all-dev, doxygen, libsqlite3-dev, libssl-dev
 
 Installation order:
     ndn-cxx (version 0.6.2)
