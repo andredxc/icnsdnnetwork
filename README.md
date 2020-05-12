@@ -97,4 +97,10 @@ Installation order:
     NFD (version 0.6.2)
     ChronoSync (vesion 0.5.1)
     NLSR (version 0.4.3)
+    ndn-tools (version 0.6.1)
+    mini-ndn
+    netbee
+    ryu
+    mininet
+    
     
