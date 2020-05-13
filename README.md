@@ -90,16 +90,19 @@ It will be able to communicate between 2 NDN hosts using only the name "drone".
 
 #### André's instructions
 
-Some of the packages needed: g++, python-sphinx, libboost-all-dev, doxygen, libsqlite3-dev, libssl-dev
+Some of the packages needed: 
+    g++ python-sphinx libboost-all-dev doxygen libsqlite3-dev libssl-dev valgrind libpcap-dev
+    cmake libxerces-c3.1 libxerces-c-dev flex bison
 
 Installation order:
-    ndn-cxx (version 0.6.2)
-    NFD (version 0.6.2)
-    ChronoSync (vesion 0.5.1)
-    NLSR (version 0.4.3)
-    ndn-tools (version 0.6.1)
+    mini-ndn/ndn-cxx (version 0.6.2)
+    mini-ndn/NFD (version 0.6.2)
+    mini-ndn/ChronoSync (vesion 0.5.1)
+    mini-ndn/NLSR (version 0.4.3)
+    mini-ndn/ndn-tools (version 0.6.1)
+    mini-ndn/mininet
     mini-ndn
-    netbee
+    netbee - to aqui
     ryu
     mininet
     
