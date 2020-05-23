@@ -1,4 +1,49 @@
-# include "agents.hpp"
+#include "face.hpp"
+#include "security/key-chain.hpp"
+
+#include <iostream>
+#include <thread>
+#include <string.h>
+
+bool g_bInitialized = false;
+
+// Avoid namespace conflicts within ndn
+namespace ndn{
+namespace examples{
+
+
+class Consumer : noncopyable
+{
+    private:
+    void onData   (const Interest& interest, const Data& data);
+    void onNack   (const Interest& interest, const lp::Nack& nack);
+    void onTimeout(const Interest& interest);
+
+    public:
+    float run(std::string param = "");
+
+    private:
+    Face        m_face;
+    std::string parameter = "";
+};
+
+
+class Producer : noncopyable
+{
+    private:
+    void onInterest      (const InterestFilter& filter, const Interest& interest);
+    void onRegisterFailed(const Name& prefix, const std::string& reason);
+
+    public:
+    void registerData(Data d);
+    void run         (std::string param = "");
+
+    private:
+    Face                  m_face;
+    KeyChain              m_keyChain;
+    std::thread           ithread;
+    std::shared_ptr<Data> data_;
+};
 
 /*
 *   Consumer ---------------------------------------------------------------------------------------
@@ -7,7 +52,7 @@
 /*
 *   Consumer::run
 */
-float Consumer::run(std::string param = "")
+float Consumer::run(std::string param)
 {
   if( !param.empty() )
     parameter = param;
@@ -79,14 +124,14 @@ void Producer::registerData(Data d)
 /*
 *   Producer::run
 */
-void Producer::run(std::string param = "")
+void Producer::run(std::string param)
 {
-    if(!initialized)
+    if(!g_bInitialized)
     {
         ndn::examples::Consumer consumer;
         auto ithread = std::thread(&ndn::examples::Consumer::run, &consumer, "controladd"+param);
         ithread.join();
-        initialized = true;
+        g_bInitialized = true;
     }
 
     if (data_ != nullptr)
@@ -155,4 +200,42 @@ void Producer::onRegisterFailed(const Name& prefix, const std::string& reason)
         << reason << ")" << std::endl;
 
     m_face.shutdown();
+}
+
+
+// End namespaces
+}}
+
+
+/*
+*   Main -------------------------------------------------------------------------------------------
+*/
+int main(int argc, char** argv)
+{
+  ndn::examples::Producer producer;
+  ndn::examples::Consumer consumer;
+
+  try {
+    if ( argc > 1 )
+    {
+      std::string type(argv[1]);
+      std::string param(argv[2]);
+      int times = std::stoi(argv[3]);
+      for(int i=0;i<times;i++)
+      {
+        std::thread ithread;
+        if (type == "producer")
+          ithread = std::thread(&ndn::examples::Producer::run, &producer, param);
+        else if (type == "consumer")
+          ithread = std::thread(&ndn::examples::Consumer::run, &consumer, param);
+
+        std::cout << type << " " << param << std::endl;
+
+        ithread.join();
+      }
+    }
+  }
+  catch (const std::exception& e) {
+    std::cerr << "ERROR: " << e.what() << std::endl;
+  }
 }
