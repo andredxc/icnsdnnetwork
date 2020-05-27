@@ -1,0 +1,19 @@
+27/05/2020 (Quarta)
+
+1)
+Gabriel não incluiu os arquivos usados nos experimentos. Não é um impeditivo, mas vou ter que refazer partes do trabalho que ele já fez e testou. Facilitaria minha vida, principalmente pq tem a parte do teste com redes IP que quase não vai ser alterado a nível de experimento.
+
+Montei um framework para envio/recebimento de pacotes por interesse. Falta definir como seriam gerados os interesses (ex. um pool de interesses acessado aleatoriamente, um pool com número igual de usos entre as opções, ... ver na dissertação)
+
+2)
+A parte da comunicação feita pelo Ryu é mais tranquila, o envio de pacotes ta mais bem definido nas modifiações do Gabriel. O que me preocupa é a parte do oftSwitch, olhando no código achei arquivos que lidam com leitura de payload dos pacotes recebidos. Faltaria testar pra validar mas, para fins de simulação, parece possível.
+
+3)
+A ideia seria "monitorar" a criação de flows no controlador e esperar até que todas as flows entre todos os pares de hosts fossem criadas? Sendo assim, tranquilo.
+
+4)
+A parte de controle de cache fica dentro do NFD com o nome de ContentStore. Ainda não variei os parâmetros de cache pra validar, mas sei quais são as funções/classes que lidam com isso. Novamente, facilitaria minha vida se o Gabriel me enviasse os códigos que ele usou para setar parâmetros de cache nos hosts a nível de experimento para que eu não tenha que refazer o trabalho dele.
+
+5)
+Entre oftSwitch <--> Ryu Ethernet, não sei qual versão mas acho que não importa
+Entre hosts <--> hosts Ethernet também, feito pelo minindn que importa funções do tipo do Mininet.
