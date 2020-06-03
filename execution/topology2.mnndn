@@ -1,0 +1,206 @@
+{
+    "hosts": [
+        {
+            "number": "1",
+            "opts": {
+                "hostname": "v1",
+                "nfd": {
+                    "log-level": "INFO"
+                },
+                "nlsr": {
+                    "angle": "0.0",
+                    "hyperbolic-state": "off",
+                    "log-level": "INFO",
+                    "max-faces-per-prefix": "0",
+                    "network": "/ndn",
+                    "radius": "0.0",
+                    "router": "/%C1.Router/cs/host",
+                    "site": "/edu/site"
+                },
+                "nodeNum": 1
+            },
+            "x": "491.0",
+            "y": "76.0"
+        },
+        {
+            "number": "4",
+            "opts": {
+                "hostname": "d2",
+                "nfd": {
+                    "log-level": "INFO"
+                },
+                "nlsr": {
+                    "angle": "0.0",
+                    "hyperbolic-state": "off",
+                    "log-level": "INFO",
+                    "max-faces-per-prefix": "0",
+                    "network": "/ndn",
+                    "radius": "0.0",
+                    "router": "/%C1.Router/cs/host",
+                    "site": "/edu/site"
+                },
+                "nodeNum": 4
+            },
+            "x": "841.0",
+            "y": "481.0"
+        },
+        {
+            "number": "7",
+            "opts": {
+                "hostname": "d1",
+                "nfd": {
+                    "log-level": "INFO"
+                },
+                "nlsr": {
+                    "angle": "0.0",
+                    "hyperbolic-state": "off",
+                    "log-level": "INFO",
+                    "max-faces-per-prefix": "0",
+                    "network": "/ndn",
+                    "radius": "0.0",
+                    "router": "/%C1.Router/cs/host",
+                    "site": "/edu/site"
+                },
+                "nodeNum": 7
+            },
+            "x": "252.0",
+            "y": "403.0"
+        },
+        {
+            "number": "3",
+            "opts": {
+                "hostname": "r2",
+                "nfd": {
+                    "log-level": "INFO"
+                },
+                "nlsr": {
+                    "angle": "0.0",
+                    "hyperbolic-state": "off",
+                    "log-level": "INFO",
+                    "max-faces-per-prefix": "0",
+                    "network": "/ndn",
+                    "radius": "0.0",
+                    "router": "/%C1.Router/cs/host",
+                    "site": "/edu/site"
+                },
+                "nodeNum": 3
+            },
+            "x": "912.0",
+            "y": "327.0"
+        },
+        {
+            "number": "2",
+            "opts": {
+                "hostname": "h2",
+                "nodeNum": 2,
+                "sched": "host"
+            },
+            "x": "811.0",
+            "y": "229.0"
+        },
+        {
+            "number": "5",
+            "opts": {
+                "hostname": "h1",
+                "nfd": {
+                    "log-level": "INFO"
+                },
+                "nlsr": {
+                    "angle": "0.0",
+                    "hyperbolic-state": "off",
+                    "log-level": "INFO",
+                    "max-faces-per-prefix": "0",
+                    "network": "/ndn",
+                    "radius": "0.0",
+                    "router": "/%C1.Router/cs/host",
+                    "site": "/edu/site"
+                },
+                "nodeNum": 5
+            },
+            "x": "264.0",
+            "y": "200.0"
+        },
+        {
+            "number": "6",
+            "opts": {
+                "hostname": "r1",
+                "nfd": {
+                    "log-level": "INFO"
+                },
+                "nlsr": {
+                    "angle": "0.0",
+                    "hyperbolic-state": "off",
+                    "log-level": "INFO",
+                    "max-faces-per-prefix": "0",
+                    "network": "/ndn",
+                    "radius": "0.0",
+                    "router": "/%C1.Router/cs/host",
+                    "site": "/edu/site"
+                },
+                "nodeNum": 6
+            },
+            "x": "202.0",
+            "y": "298.0"
+        }
+    ],
+    "links": [
+        {
+            "dest": "v1",
+            "opts": {},
+            "src": "h1"
+        },
+        {
+            "dest": "v1",
+            "opts": {},
+            "src": "r1"
+        },
+        {
+            "dest": "v1",
+            "opts": {},
+            "src": "d1"
+        },
+        {
+            "dest": "r1",
+            "opts": {},
+            "src": "d1"
+        },
+        {
+            "dest": "h1",
+            "opts": {},
+            "src": "r1"
+        },
+        {
+            "dest": "d2",
+            "opts": {},
+            "src": "d1"
+        },
+        {
+            "dest": "r2",
+            "opts": {},
+            "src": "d2"
+        },
+        {
+            "dest": "h2",
+            "opts": {},
+            "src": "r2"
+        },
+        {
+            "dest": "v1",
+            "opts": {},
+            "src": "h2"
+        },
+        {
+            "dest": "v1",
+            "opts": {},
+            "src": "r2"
+        },
+        {
+            "dest": "v1",
+            "opts": {},
+            "src": "d2"
+        }
+    ],
+    "routers": [],
+    "switches": [],
+    "version": "2"
+}

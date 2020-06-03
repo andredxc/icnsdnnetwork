@@ -91,18 +91,18 @@ It will be able to communicate between 2 NDN hosts using only the name "drone".
 
 #### André's instructions
 
-Some of the packages needed:
+# Some of the packages needed:
     g++ python-sphinx libboost-all-dev doxygen libsqlite3-dev libssl-dev valgrind libpcap-dev
     cmake libxerces-c3.1 libxerces-c-dev flex bison libpcre3-dev python-pip msgpack-python
 
-Some of the python packages needed:
+# Some of the python packages needed:
     webob routes oslo.config msgpack eventlet oslo_config('cannot import abc') networkx==2.2
 
-Installation order:
+# Installation order:
     mini-ndn/ndn-cxx (version 0.6.2)
-    mini-ndn/NFD (version 0.6.2)
+    mini-ndn/NFD (version 0.6.2) copy .conf files (see installation docs)
     mini-ndn/ChronoSync (vesion 0.5.1)
-    mini-ndn/NLSR (version 0.4.3)
+    mini-ndn/NLSR (version 0.4.3) copy .conf files (see installation docs)
     mini-ndn/ndn-tools (version 0.6.1)
     mini-ndn/mininet
     mini-ndn

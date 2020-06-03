@@ -7,22 +7,30 @@ def printOutput( output ):
 
 def faceCreate( ip ):
 	p = subprocess.Popen('nfdc face create udp://{}'.format(ip), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	print('cmd: nfdc face create udp://{}'.format(ip))
 	p.wait()
 	printOutput(p)
 
 def addRoute( routetype, ip ):
+	print('addRoute start')
 	p = subprocess.Popen('nfdc route add {} udp://{}'.format(routetype, ip), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	print('cmd: nfdc route add {} udp://{}'.format(routetype, ip))
 	p.wait()
 	printOutput(p)
+	print('addRoute end')
 
 def addControlRoutes():
+	print('addControlRoutes start')
 	for asset in assets:
 		p = subprocess.Popen('nfdc route add controladd{} udp://10.0.0.7'.format(asset), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+		print('cmd: nfdc route add controladd{} udp://10.0.0.7'.format(asset))
 		p.wait()
 		printOutput(p)
+	print('addControlRoutes end')
 
 def changeEnvironment( asset ):
 	os.environ["HOME"] = "/tmp/minindn/{}/".format(asset)
+	print('export HOME=/tmp/minindn/{}/'.format(asset))
 	print ("Environment set: ", os.environ["HOME"])
 
 
