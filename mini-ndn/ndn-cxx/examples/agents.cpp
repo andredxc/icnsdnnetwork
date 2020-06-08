@@ -5,7 +5,22 @@
 #include <thread>
 #include <string.h>
 
+#define N_PAYLOAD_QTD 6
+#define N_PAYLOAD0_SIZE 10
+#define N_PAYLOAD1_SIZE 10
+#define N_PAYLOAD2_SIZE 10
+#define N_PAYLOAD3_SIZE 10
+#define N_PAYLOAD4_SIZE 10
+#define N_PAYLOAD5_SIZE 10
+
+typedef struct C2Data{
+    std::string strLabel;
+    int         nSizeBytes;
+    void*       pPayload;
+}C2DATA;
+
 bool g_bInitialized = false;
+
 
 // Avoid namespace conflicts within ndn
 namespace ndn{
@@ -27,7 +42,6 @@ class Consumer : noncopyable
     std::string parameter = "";
 };
 
-
 class Producer : noncopyable
 {
     private:
@@ -43,6 +57,18 @@ class Producer : noncopyable
     KeyChain              m_keyChain;
     std::thread           ithread;
     std::shared_ptr<Data> data_;
+};
+
+class C2DataTypes : noncopyable
+{
+    private:
+    void* m_arrPayloads[N_PAYLOAD_QTD];
+
+    public:
+    C2DataTypes();
+    ~C2DataTypes();
+
+    C2DATA* generatePackage(int nType);
 };
 
 /*
@@ -202,10 +228,74 @@ void Producer::onRegisterFailed(const Name& prefix, const std::string& reason)
     m_face.shutdown();
 }
 
+/*
+*   C2DataTypes ------------------------------------------------------------------------------------
+*/
+
+/*
+*   C2DataTypes::C2DataTypes
+*/
+C2DataTypes::C2DataTypes()
+{
+    // Allocate possible payloads
+    m_arrPayloads[0] = (void*)malloc(N_PAYLOAD0_SIZE);
+    m_arrPayloads[1] = (void*)malloc(N_PAYLOAD1_SIZE);
+    m_arrPayloads[2] = (void*)malloc(N_PAYLOAD2_SIZE);
+    m_arrPayloads[3] = (void*)malloc(N_PAYLOAD3_SIZE);
+    m_arrPayloads[4] = (void*)malloc(N_PAYLOAD4_SIZE);
+    m_arrPayloads[5] = (void*)malloc(N_PAYLOAD5_SIZE);
+}
+
+/*
+*   C2DataTypes::generatePackage
+*/
+C2DATA* C2DataTypes::generatePackage(int nType)
+{
+    C2DATA* pC2Data;
+
+    pC2Data = (C2DATA*)malloc(sizeof(pC2Data));
+
+    switch(nType){
+        case 1:
+            pC2Data->strLabel   = "aindaNaoSei";
+            pC2Data->pPayload   = m_arrPayloads[0];
+            pC2Data->nSizeBytes = N_PAYLOAD0_SIZE;
+            break;
+        case 2:
+            pC2Data->strLabel   = "aindaNaoSei";
+            pC2Data->pPayload   = m_arrPayloads[1];
+            pC2Data->nSizeBytes = N_PAYLOAD1_SIZE;
+            break;
+        case 3:
+            pC2Data->strLabel   = "aindaNaoSei";
+            pC2Data->pPayload   = m_arrPayloads[2];
+            pC2Data->nSizeBytes = N_PAYLOAD2_SIZE;
+            break;
+        case 4:
+            pC2Data->strLabel   = "aindaNaoSei";
+            pC2Data->pPayload   = m_arrPayloads[3];
+            pC2Data->nSizeBytes = N_PAYLOAD3_SIZE;
+            break;
+        case 5:
+            pC2Data->strLabel   = "aindaNaoSei";
+            pC2Data->pPayload   = m_arrPayloads[4];
+            pC2Data->nSizeBytes = N_PAYLOAD4_SIZE;
+            break;
+        case 6:
+            pC2Data->strLabel   = "aindaNaoSei";
+            pC2Data->pPayload   = m_arrPayloads[5];
+            pC2Data->nSizeBytes = N_PAYLOAD5_SIZE;
+            break;
+        default:
+            free(pC2Data);
+            pC2Data = NULL;
+            std::cout << "Error, data type unknown nType=" << nType << std::endl;
+    }
+    return pC2Data;
+}
 
 // End namespaces
 }}
-
 
 /*
 *   Main -------------------------------------------------------------------------------------------

@@ -4,17 +4,15 @@
 
 #define N_PAYLOAD_QTD 6
 
-#typedef struct C2Data{
+typedef struct c2_data{
     std::string strLabel;
     int         nSizeBytes;
     void*       pPayload;
 }C2DATA;
 
 
-using namespace std{
-
-
-class C2DataTypes : noncopyable{
+class C2DataTypes : noncopyable
+{
 
     private:
         void* m_arrPayloads[N_PAYLOAD_QTD];
@@ -25,6 +23,3 @@ class C2DataTypes : noncopyable{
 
         C2DATA* generatePackage(int nType);
 };
-
-
-} // Close namespace std
