@@ -21,5 +21,6 @@ class C2DataTypes : noncopyable
         C2DataTypes();
         ~C2DataTypes();
 
-        C2DATA* generatePackage(int nType);
+        C2DATA* generatePackage(int nType, std::string strPackageName);
+        C2DATA* generatePackageFromPool(int nPoolSize);
 };
