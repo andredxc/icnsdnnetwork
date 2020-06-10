@@ -2,7 +2,13 @@
 #include <stdio.h>
 #include <boost/noncopyable.hpp>
 
-#define N_PAYLOAD_QTD 6
+#define N_PAYLOAD_QTD   6
+#define N_PAYLOAD0_SIZE 1
+#define N_PAYLOAD1_SIZE 10
+#define N_PAYLOAD2_SIZE 20
+#define N_PAYLOAD3_SIZE 30
+#define N_PAYLOAD4_SIZE 40
+#define N_PAYLOAD5_SIZE 50
 
 typedef struct c2_data{
     std::string strLabel;
@@ -11,7 +17,8 @@ typedef struct c2_data{
 }C2DATA;
 
 
-class C2DataTypes : noncopyable
+class C2DataTypes
+// : noncopyable
 {
 
     private:
