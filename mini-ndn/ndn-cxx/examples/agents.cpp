@@ -88,6 +88,14 @@ float Consumer::run(std::string param)
   interest.setCanBePrefix(true);
   interest.setMustBeFresh(true);
 
+
+    /**/
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
+    auto time_diff = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+    std::cout << "Time:" << time_diff << std::endl;
+
+
   std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
   m_face.expressInterest(interest,
                          bind(&Consumer::onData, this,  _1, _2),

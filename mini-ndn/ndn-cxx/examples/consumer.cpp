@@ -61,16 +61,17 @@ public:
       param = os.str();
     }
 
-    m_face.setInterestFilter("/"+param +"/",
+    m_face.setInterestFilter("/" + param + "/",
                              bind(&Producer::onInterest, this, _1, _2),
                              RegisterPrefixSuccessCallback(),
                              bind(&Producer::onRegisterFailed, this, _1, _2));
+
     m_face.processEvents();
   }
 
   void
-  run_thread(Data d) 
-  { 
+  run_thread(Data d)
+  {
     data_ = make_shared<Data> (d);
     ithread = std::thread(&ndn::examples::Producer::run, this, "");
     ithread.join();
@@ -131,12 +132,18 @@ public:
   float
   run(std::string param = "")
   {
+    std::chrono::steady_clock::time_point dtBegin;
+    std::chrono::steady_clock::time_point dtEnd;
+    // auto time_diff;
+    std::chrono::duration_cast<std::chrono::microseconds> dtTimeDiff;
+    FILE* pFile;
+
     Interest interest(Name("/"+param));
     interest.setInterestLifetime(2_s); // 2 seconds
     interest.setCanBePrefix(true);
     interest.setMustBeFresh(true);
 
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    dtBegin = std::chrono::steady_clock::now();
     m_face.expressInterest(interest,
                            bind(&Consumer::onData, this,  _1, _2),
                            bind(&Consumer::onNack, this, _1, _2),
@@ -146,9 +153,22 @@ public:
 
     // processEvents will block until the requested data received or timeout occurs
     m_face.processEvents();
-    std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
-    auto time_diff = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
-    return time_diff;
+    dtEnd      = std::chrono::steady_clock::now();
+    dtTimeDiff = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+
+    std::cout << "Time elapsed:" << dtTimeDiff << std::endl;
+
+    // Write results to file
+    pFile = fopen("~/consumerOut.log", "a");  // TODO: relative path might not work
+
+    if(pFile){
+      fprintf(pFile, "%s;%d", param.c_str(), dtTimeDiff);
+      fclose(pFile);
+    }
+    else{
+      std::cout << "Consumer::run ERROR opening output file" << std::endl;
+    }
+    return dtTimeDiff;
   }
 
 private:
@@ -196,7 +216,7 @@ main(int argc, char** argv)
       {
         std::vector<float> total;
         float sum = 0, mean, standard_deviation = 0;
-        
+
         for( int i = 0; i<times[p]; i++ )
         {
             total.push_back( consumer.run(param) );
@@ -217,7 +237,7 @@ main(int argc, char** argv)
       for(int p = 0; p < 4; p++)
       {
           std::cout << times[p] << "- Mean: " << means[p]/1000 <<"\n Standard deviation: " << std_dev[p]/1000 << std::endl;
-      } 
+      }
     }
   }
   catch (const std::exception& e) {

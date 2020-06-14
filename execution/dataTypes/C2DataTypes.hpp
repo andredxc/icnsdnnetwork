@@ -30,4 +30,5 @@ class C2DataTypes
 
         C2DATA* generatePackage(int nType, std::string strPackageName);
         C2DATA* generatePackageFromPool(int nPoolSize);
+        C2DATA* generatePackageFromInterest(std::string strInterest);
 };

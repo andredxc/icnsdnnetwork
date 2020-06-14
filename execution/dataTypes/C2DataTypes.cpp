@@ -90,3 +90,17 @@ C2DATA* C2DataTypes::generatePackageFromPool(int nPoolSize)
     return generatePackage(nPackageType, strPackageName);
 }
 
+/*
+*   C2DataTypes::generatePackageFromInterest
+*/
+C2DATA* C2DataTypes::generatePackageFromInterest(std::string strInterest)
+{
+    int nPackageType;
+    int nID;
+    C2DATA* pData;
+
+    sscanf(strInterest.c_str(), "C2Data-%d-Type%d", &nID, &nPackageType);
+
+    pData = generatePackage(nPackageType, strInterest);
+    return pData;
+}

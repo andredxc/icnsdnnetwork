@@ -8,7 +8,7 @@ Montei um framework para envio/recebimento de pacotes por interesse. Falta defin
 2)
 A parte da comunicação feita pelo Ryu é mais tranquila, o envio de pacotes ta mais bem definido nas modifiações do Gabriel. O que me preocupa é a parte do oftSwitch, olhando no código achei arquivos que lidam com leitura de payload dos pacotes recebidos. Faltaria testar pra validar mas, para fins de simulação, parece possível.
 
-3)
+3) - tirado
 A ideia seria "monitorar" a criação de flows no controlador e esperar até que todas as flows entre todos os pares de hosts fossem criadas? Sendo assim, tranquilo.
 
 4)

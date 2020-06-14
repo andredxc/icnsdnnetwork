@@ -65,8 +65,8 @@ public:
   }
 
   void
-  run_thread(Data d) 
-  { 
+  run_thread(Data d)
+  {
     data_ = make_shared<Data> (d);
     ithread = std::thread(&ndn::examples::Producer::run, this, "");
   }
