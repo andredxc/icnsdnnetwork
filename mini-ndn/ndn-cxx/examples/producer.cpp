@@ -38,9 +38,13 @@ namespace examples {
 class Producer : noncopyable
 {
 public:
-  void
-  run(std::string param = "")
+  /*
+  * Producer::run
+  */
+  void run(std::string param = "")
   {
+    int nID, nParams;
+
     if (data_ != nullptr)
     {
       param = "";
@@ -57,6 +61,14 @@ public:
       param = os.str();
     }
 
+    // Identify data type from string
+    nParams = sscanf(param, "C2Data-%d-Type%d", &nID, &m_nDataType);
+
+    if (nParams = 0){
+      // C2DataType was not present, disable
+      m_nDataType = -1;
+    }
+
     m_face.setInterestFilter("/"+param +"/",
                              bind(&Producer::onInterest, this, _1, _2),
                              RegisterPrefixSuccessCallback(),
@@ -64,17 +76,23 @@ public:
     m_face.processEvents();
   }
 
-  void
-  run_thread(Data d)
+  /*
+  * Producer::run_thread
+  */
+  void run_thread(Data d)
   {
     data_ = make_shared<Data> (d);
     ithread = std::thread(&ndn::examples::Producer::run, this, "");
   }
 
 private:
-  void
-  onInterest(const InterestFilter& filter, const Interest& interest)
+  /*
+  * Producer::onInterest
+  */
+  void onInterest(const InterestFilter& filter, const Interest& interest)
   {
+    static const std::string strContent;
+
     std::cout << "<< I: " << interest << std::endl;
 
     // Create new name, based on Interest's name
@@ -83,14 +101,24 @@ private:
       .append("testApp") // add "testApp" component to Interest name
       .appendVersion();  // add "version" component (current UNIX timestamp in milliseconds)
 
-    if ( data_ == nullptr ){
-      static const std::string content = "HELLO KITTY!";
+    if (data_ == nullptr){
 
       // Create Data packet
       data_ = make_shared<Data>();
       data_->setName(dataName);
       data_->setFreshnessPeriod(0_s); // 10 seconds
-      data_->setContent(reinterpret_cast<const uint8_t*>(content.data()), content.size());
+
+      if (m_nDataType >= 0){
+        // C2DataType is enabled
+        // TODO: Add verification to check if N_PAYLOAD_QTD is aligned between random_talks and here
+        strContent = "C2 DATA!";
+        // data_->setContent(reinterpret_cast<const uint8_t*>(strContent.data()), strContent.size());
+      }
+      else{
+        // Standard data
+        strContent = "HELLO KITTY!";
+        data_->setContent(reinterpret_cast<const uint8_t*>(strContent.data()), strContent.size());
+      }
     }
 
     // Sign Data packet with default identity
@@ -103,9 +131,10 @@ private:
     m_face.put(*data_);
   }
 
-
-  void
-  onRegisterFailed(const Name& prefix, const std::string& reason)
+  /*
+  * Producer::onRegisterFailed
+  */
+  void onRegisterFailed(const Name& prefix, const std::string& reason)
   {
     std::cerr << "ERROR: Failed to register prefix \""
               << prefix << "\" in local hub's daemon (" << reason << ")"
@@ -114,6 +143,7 @@ private:
   }
 
 private:
+  int m_nDataType;
   Face m_face;
   KeyChain m_keyChain;
   std::thread ithread;

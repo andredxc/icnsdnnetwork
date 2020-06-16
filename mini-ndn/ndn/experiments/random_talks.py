@@ -49,15 +49,6 @@ class RandomTalks(Experiment):
 
             time.sleep(2)
 
-         # print('strResult0=' + strResult0)
-         # print('strResult1=' + strResult1)
-
-         # for node in self.net.hosts:
-         #     strResult = node.cmd('ifconfig')
-         #     print(strResult)
-         #     # Send output to a file
-
-
     def selectProducerConsumer(nHosts):
       """
       Randomly select a non-equal producer-consumer pair

@@ -129,12 +129,14 @@ private:
 class Consumer : noncopyable
 {
 public:
-  float
-  run(std::string param = "")
+  /*
+  *   Consumer::run
+  */
+  float run(std::string param = "")
   {
     std::chrono::steady_clock::time_point dtBegin;
     std::chrono::steady_clock::time_point dtEnd;
-    // auto time_diff;
+    // previously auto time_diff;
     std::chrono::duration_cast<std::chrono::microseconds> dtTimeDiff;
     FILE* pFile;
 
@@ -172,11 +174,15 @@ public:
   }
 
 private:
-  void
-  onData(const Interest& interest, const Data& data)
+  /*
+  *   Consumer::onData
+  */
+  void onData(const Interest& interest, const Data& data)
   {
     std::cout << data << std::endl;
     //Producer producer;
+
+    // Access C2 with data.getContent maybe
 
     //producer.run_thread(data);
   }
