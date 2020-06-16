@@ -28,6 +28,33 @@ Entre hosts <--> hosts Ethernet também, feito pelo minindn que importa funçõe
   - Perdas nos enlaces
 
 - Alterar os cabeçalhos dos pacotes (vai fazer alguma diferença??)
+  Tamanho do cabeçalho e, principalmente, do payload.
 
 - Sobre como fazer as simulações
   - Ter um pool de interesses e pacotes (como eu implementei até agora). Cada vez pegar um pacote aleatório e, se já foi criado, sem problema, mas se ainda não foi criado, sortear um outro nodo para ser o produtor desse pacote.
+
+- Tamanho dos pacotes
+
+- Quantos nodos vão ser simulados
+
+como trocar payload dos pacotes ethernet no miniNDN
+
+
+simulações
+
+- sensor só produz
+- periodicidade dos dados de controle de 1 min (=60 rodadas) TTL específico 60 segundos
+- tempo de missão: 1h
+- cada drone: 6 arquivos de vídeo (1 a cada 10 minutos) TTL=10min
+- cada humano: relatorios apenas (2 a cada 1h de missão) TTL=5min
+- cada sensor: 10 por missão TTL 2min
+
+caches
+
+- UAV: 8GB -> 32GB (tipo cartão de memória)
+- Humano: 8GB -> 32GB (tipo carão de memória)
+- Veículo: 5TB -> 10TB
+
+cabeçalho
+
+- Variando o cabeçalho e a taxa de perda nos enlaces, vale mais a pena procurar pelos valores do WIFI IMAX (ou algo parecido), que é o protocolo usado no militar
