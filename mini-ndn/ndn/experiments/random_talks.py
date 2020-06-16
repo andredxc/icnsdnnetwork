@@ -7,49 +7,64 @@ c_strEportCmd = 'export HOME=/home/osboxes/ && '
 
 class RandomTalks(Experiment):
 
-    def __init__(self, args):
-        Experiment.__init__(self, args)
+   def __init__(self, args):
+      Experiment.__init__(self, args)
 
+   def setup(self):
 
-    def setup(self):
+      for node in self.net.hosts:
+         print('Node: ' + str(node))
 
-        for node in self.net.hosts:
-            print('Node: ' + str(node))
+   def run(self):
 
+      # User defined experiment parameters
+      nInterests  = 100
+      nPoolSize   = 100
+      nPayloadQtd = 6
+      print('Running, nInterests=' + nInterests + '; nPoolSize=' + nPoolSize +
+         '; nPayloadQtd=' + nPayloadQtd)
 
-    def run(self):
+      # Other parameters
+      nHosts       = len(self.net.hosts)
+      hshProducers = {}
 
-         # User defined experiment parameters
-         nInterests  = 100
-         nPoolSize   = 100
-         nPayloadQtd = 6
-         print('Running, nInterests=' + nInterests + '; nPoolSize=' + nPoolSize +
-            '; nPayloadQtd=' + nPayloadQtd)
+      # Select producer/consumer pairs
+      for nIteration in range(0, nInterests):
+         # Generate producer/consumer pair
+         nCon        = randint(0, nHosts-1)
+         consumer    = self.net.hosts[nCon]
+         strInterest = randomDataInfoFromPool(nPayloadQtd, nPoolSize)
 
-         # Other parameters
-         nHosts = len(self.net.hosts)
+         if (strInterest not in hshProducers):
+            # No producer has yet been assigned to this data
+            nProd = randomHostPair(nCon, nHosts)
+            hshProducers[strInterest] = nProd
+         else:
+            # Data already has a producer
+            nProd = hshProducers[strInterest]
 
-         # Select producer/consumer pairs
-         for nIteration in range(0, nInterests):
-            # Generate producer/consumer pair
-            (nProd, nCon) = selectProducerConsumer(nHosts)
-            producer      = self.net.hosts[nProd]
-            consumer      = self.net.hosts[nCon]
-            strInterest   = randomDataInfoFromPool(nPayloadQtd, nPoolSize)
+         producer = self.net.hosts[nProd]
 
-            print('run: Selected pair, nProducer=' + nProd + '; strProducer=' + str(producer) +
-               '; nConsumer=' + nCon + '; strConsumer=' + str(consumer) + '; interest=' +
-               strInterest)
+         print('run: Selected pair, nProducer=' + nProd + '; strProducer=' + str(producer) +
+            '; nConsumer=' + nCon + '; strConsumer=' + str(consumer) + '; interest=' +
+            strInterest)
 
-            producer.cmd('producer ' + strInterest + ' &')
+         producer.cmd('producer ' + strInterest + ' &')
+         time.sleep(1)
+         consumer.cmd('consumer ' + strInterest + ' &')
+         time.sleep(2)
 
-            time.sleep(1)
+   def randomHostPair(nOriginal, nHosts):
+      nPair = 0
+      if (nHosts > 1):
+         while (True):
+            nPair = randint(0, nHosts-1)
+            if (nPair != nOriginal):
+               return nPair
+      else:
+         return 0
 
-            consumer.cmd('consumer ' + strInterest + ' &')
-
-            time.sleep(2)
-
-    def selectProducerConsumer(nHosts):
+   def selectProducerConsumer(nHosts):
       """
       Randomly select a non-equal producer-consumer pair
       :return indexes for producer and consumer
@@ -65,24 +80,24 @@ class RandomTalks(Experiment):
                bDone = True
          # Return non-equal pair
          return (nProducer, nConsumer)
-      else
+      else:
          return (0,0)
 
-    def randomDataInfoFromPool(nPayloadQtd, nPoolSize):
-        """
-        Generate C2 data info.
-        """
+   def randomDataInfoFromPool(nPayloadQtd, nPoolSize):
+      """
+      Generate C2 data info.
+      """
 
-        if (nPoolSize % nPayloadQtd != 0):
-            print('randomDataInfoFromPool: Payload times not evenly distributed')
-            raise ArgumentError
+      if (nPoolSize % nPayloadQtd != 0):
+         print('randomDataInfoFromPool: Payload times not evenly distributed')
+         raise ArgumentError
 
-        # Determine which package it is
-        nPackagesPerType = nPoolSize / nPayloadQtd
-        nPackageID       = randint(0, nPackagesPerType)
-        nPackageType     = rand(0, nPayloadQtd-1)
-        strPackageName   = 'C2Data-' + nPackageID + '-Type' + nPackageType
-        return strPackageName
+      # Determine which package it is
+      nPackagesPerType = nPoolSize / nPayloadQtd
+      nPackageID       = randint(0, nPackagesPerType)
+      nPackageType     = rand(0, nPayloadQtd-1)
+      strPackageName   = 'C2Data-' + nPackageID + '-Type' + nPackageType
+      return strPackageName
 
 
 

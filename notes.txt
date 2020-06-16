@@ -17,3 +17,17 @@ A parte de controle de cache fica dentro do NFD com o nome de ContentStore. Aind
 5)
 Entre oftSwitch <--> Ryu Ethernet, não sei qual versão mas acho que não importa
 Entre hosts <--> hosts Ethernet também, feito pelo minindn que importa funções do tipo do Mininet.
+
+
+15/06/2020 (Segunda)
+
+- Simulações com 100K, 200K, ...1KK requisições(interesses)
+  - Variar cache
+  - Variar TTL dos dados
+  - Dados criptografados
+  - Perdas nos enlaces
+
+- Alterar os cabeçalhos dos pacotes (vai fazer alguma diferença??)
+
+- Sobre como fazer as simulações
+  - Ter um pool de interesses e pacotes (como eu implementei até agora). Cada vez pegar um pacote aleatório e, se já foi criado, sem problema, mas se ainda não foi criado, sortear um outro nodo para ser o produtor desse pacote.
