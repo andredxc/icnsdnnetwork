@@ -1,29 +1,13 @@
-/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2013-2019 Regents of the University of California.
- *
- * This file is part of ndn-cxx library (NDN C++ library with eXperimental eXtensions).
- *
- * ndn-cxx library is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * ndn-cxx library is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- * PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
- *
- * You should have received copies of the GNU General Public License and GNU Lesser
- * General Public License along with ndn-cxx, e.g., in COPYING.md file.  If not, see
- * <http://www.gnu.org/licenses/>.
- *
- * See AUTHORS.md for complete list of ndn-cxx authors and contributors.
- *
- * @author Alexander Afanasyev <http://lasr.cs.ucla.edu/afanasyev/index.html>
- */
+*   Vanilla consumer for MiniNDN
+*
+*
+*/
 
 #include <ndn-cxx/face.hpp>
 
 #include <iostream>
+#include <chrono>
 
 // Enclosing code in ndn simplifies coding (can also use `using namespace ndn`)
 namespace ndn {
@@ -33,25 +17,53 @@ namespace examples {
 class Consumer
 {
 public:
-  void
-  run()
+  void run(std::string strInterest)
   {
-    Name interestName("/example/testApp2/randomData");
+    Name     interestName;
+    Interest interest;
+    float    dtTimeDiff;
+    FILE*    pFile;
+    std::chrono::steady_clock::time_point dtBegin;
+    std::chrono::steady_clock::time_point dtEnd;
+
+    if (strInterest.length() == 0){
+      // No specific interest given as parameter
+      strInterest = "/example/testApp2/randomData";
+    }
+
+    interestName = Name(strInterest);
     interestName.appendVersion();
 
-    Interest interest(interestName);
+    interest = Interest(interestName);
     interest.setCanBePrefix(false);
     interest.setMustBeFresh(true);
     interest.setInterestLifetime(6_s); // The default is 4 seconds
 
-    std::cout << "Sending Interest " << interest << std::endl;
+    dtBegin = std::chrono::steady_clock::now();
     m_face.expressInterest(interest,
                            bind(&Consumer::onData, this,  _1, _2),
                            bind(&Consumer::onNack, this, _1, _2),
                            bind(&Consumer::onTimeout, this, _1));
 
+    std::cout << "Sending Interest " << interest << std::endl;
     // processEvents will block until the requested data is received or a timeout occurs
     m_face.processEvents();
+
+    dtEnd      = std::chrono::steady_clock::now();
+    dtTimeDiff = std::chrono::duration_cast<std::chrono::microseconds>(dtEnd - dtBegin).count();
+
+    std::cout << "Time elapsed:" << dtTimeDiff << std::endl;
+
+    // Write results to file
+    pFile = fopen("~/consumerOut.log", "a");  // TODO: relative path might not work
+
+    if(pFile){
+      fprintf(pFile, "%s;%.3f", strInterest.c_str(), dtTimeDiff);
+      fclose(pFile);
+    }
+    else{
+      std::cout << "Consumer::run ERROR opening output file" << std::endl;
+    }
   }
 
 private:
@@ -83,9 +95,18 @@ private:
 int
 main(int argc, char** argv)
 {
+  std::string strInterest;
+
+  if (argc > 1){
+    strInterest = argv[1];
+  }
+  else{
+    strInterest = "";
+  }
+
   try {
     ndn::examples::Consumer consumer;
-    consumer.run();
+    consumer.run(strInterest);
     return 0;
   }
   catch (const std::exception& e) {
