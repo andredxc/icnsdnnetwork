@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdio.h>
-#include <boost/noncopyable.hpp>
+// #include <boost/noncopyable.hpp>
 
 #define N_PAYLOAD_QTD   6
 #define N_PAYLOAD0_SIZE 1
