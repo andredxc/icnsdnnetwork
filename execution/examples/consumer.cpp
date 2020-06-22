@@ -15,7 +15,7 @@ namespace examples {
 class Consumer
 {
   public:
-    void run(std::string strInterest);
+    void run(std::string strInterest, std::string strNode);
 
   private:
     void onData(const Interest&, const Data& data)     const;
@@ -24,6 +24,7 @@ class Consumer
 
   private:
     Face m_face;
+    std::string m_strNode;
 };
 
 // --------------------------------------------------------------------------------
@@ -31,12 +32,13 @@ class Consumer
 //
 //
 // --------------------------------------------------------------------------------
-void Consumer::run(std::string strInterest)
+void Consumer::run(std::string strInterest, std::string strNode)
 {
   Name     interestName;
   Interest interest;
-  float    dtTimeDiff;
+  float    sTimeDiff;
   FILE*    pFile;
+  char     strFile[50];
   std::chrono::steady_clock::time_point dtBegin;
   std::chrono::steady_clock::time_point dtEnd;
 
@@ -44,6 +46,8 @@ void Consumer::run(std::string strInterest)
     // No specific interest given as parameter
     strInterest = "/example/testApp2/randomData";
   }
+
+  fprintf(stderr, "[Consumer::run] Consuming interest=%s; node=%s", strInterest.c_str(), strNode.c_str());
 
   interestName = Name(strInterest);
   interestName.appendVersion();
@@ -64,19 +68,22 @@ void Consumer::run(std::string strInterest)
   m_face.processEvents();
 
   dtEnd      = std::chrono::steady_clock::now();
-  dtTimeDiff = std::chrono::duration_cast<std::chrono::microseconds>(dtEnd - dtBegin).count();
+  sTimeDiff  = std::chrono::duration_cast<std::chrono::microseconds>(dtEnd - dtBegin).count();
 
-  std::cout << "Time elapsed:" << dtTimeDiff << std::endl;
+  std::cout << "Time elapsed:" << sTimeDiff << std::endl;
 
-  // Write results to file
-  pFile = fopen("~/consumerOut.log", "a");  // TODO: relative path might not work
+  if (strNode.length() == 0){
+    // Write results to file
+    snprintf(strFile, sizeof(strFile), "/tmp/minindn/%s/consumerLog.log", strNode.c_str());
+    pFile = fopen(strFile, "a");  // TODO: relative path might not work
 
-  if (pFile){
-    fprintf(pFile, "%s;%.3f", strInterest.c_str(), dtTimeDiff);
-    fclose(pFile);
-  }
-  else{
-    std::cout << "Consumer::run ERROR opening output file" << std::endl;
+    if (pFile){
+      fprintf(pFile, "%s;%.3f", strInterest.c_str(), sTimeDiff);
+      fclose(pFile);
+    }
+    else{
+      std::cout << "Consumer::run ERROR opening output file" << std::endl;
+    }
   }
 }
 
@@ -116,17 +123,21 @@ void Consumer::onTimeout(const Interest& interest) const
 int main(int argc, char** argv)
 {
   std::string strInterest;
+  std::string strNode;
 
-  if (argc > 1){
+  if (argc > 2){
+    // Use explicit interest and node name
     strInterest = argv[1];
+    strNode     = argv[2];
   }
   else{
     strInterest = "";
+    strNode     = "";
   }
 
   try {
     ndn::examples::Consumer consumer;
-    consumer.run(strInterest);
+    consumer.run(strInterest, strNode);
     return 0;
   }
   catch (const std::exception& e) {

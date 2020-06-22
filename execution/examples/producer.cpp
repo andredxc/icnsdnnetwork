@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#define STR_APPNAME "C2Data"
+
 // Enclosing code in ndn simplifies coding (can also use `using namespace ndn`)
 namespace ndn {
 // Additional nested namespaces should be used to prevent/limit name conflicts
@@ -18,7 +20,7 @@ namespace examples {
 class Producer
 {
   public:
-  void run(std::string strParam);
+    void run(std::string strFilter);
 
   private:
     void onInterest(const InterestFilter&, const Interest& interest);
@@ -27,7 +29,6 @@ class Producer
   private:
     Face     m_face;
     KeyChain m_keyChain;
-    int      m_nDataType;
 };
 
 // --------------------------------------------------------------------------------
@@ -35,29 +36,22 @@ class Producer
 //
 //
 // --------------------------------------------------------------------------------
-void Producer::run(std::string strParam)
+void Producer::run(std::string strFilter)
 {
   int nParams, nID;
 
-  // Identify data type from string
-  nParams = sscanf(strParam.data(), "C2Data-%d-Type%d", &nID, &m_nDataType);
-
-  if (nParams == 0){
-    // C2DataType was not present, disable
-    m_nDataType = -1;
-    fprintf(stderr, "Producer for default data");
-  }
-  else{
-    // Using C2 data
-    fprintf(stderr, "Producer for C2Data=%s; nID=%d; nDataType=%d", strParam.c_str(), nID,
-      m_nDataType);
+  if (strFilter.length() == 0){
+    // No specific filter set
+    strFilter = "/exampleApp/blup";
   }
 
-  // TODO: add interest filter based on node name received as argv paramenter
-  m_face.setInterestFilter("/example/testApp",
-                            bind(&Producer::onInterest, this, _1, _2),
-                            nullptr, // RegisterPrefixSuccessCallback is optional
-                            bind(&Producer::onRegisterFailed, this, _1, _2));
+  fprintf(stderr, "[Producer::run] Producer for filter=%s", strFilter.c_str())
+
+  // strInterest = '/' + c_strAppName + '/' + str(producer) + '/' + strInterest
+  m_face.setInterestFilter(strFilter,
+                           bind(&Producer::onInterest, this, _1, _2),
+                           nullptr, // RegisterPrefixSuccessCallback is optional
+                           bind(&Producer::onRegisterFailed, this, _1, _2));
   m_face.processEvents();
 }
 
@@ -69,20 +63,24 @@ void Producer::run(std::string strParam)
 void Producer::onInterest(const InterestFilter&, const Interest& interest)
 {
   static std::string strContent; // This used to be a const, might be a problem
+  int nType, nID, nRead;
+  auto data;
 
   std::cout << ">> I: " << interest << std::endl;
 
-  if (m_nDataType >= 0){
+  nRead = sscanf(interest, "C2Data-%d-Type%d", &nID, &nType)
+
+  if (nRead > 0){
     // Use C2 data
     strContent = "C2Data";
   }
   else{
     // Use random data to keep retro-compatibility
-      strContent = "Hello, world!";
+    strContent = "Hello, world!";
   }
 
   // Create Data packet
-  auto data = make_shared<Data>(interest.getName());
+  data = make_shared<Data>(interest.getName());
   data->setFreshnessPeriod(10_s);
   data->setContent(reinterpret_cast<const uint8_t*>(strContent.data()), strContent.size());
 
@@ -115,20 +113,20 @@ void Producer::onRegisterFailed(const Name& prefix, const std::string& reason)
 
 int main(int argc, char** argv)
 {
-  std::string strParam;
+  std::string strFilter;
 
-  if (argc > 2){
-    // Data name as parameter
-    strParam = argv[1];
+  if (argc > 1){
+    // Filter as command line parameter
+    strFilter = argv[1];
   }
   else{
     // No data name
-    strParam = "";
+    strFilter = "";
   }
 
   try {
     ndn::examples::Producer producer;
-    producer.run(strParam);
+    producer.run(strFilter);
     return 0;
   }
   catch (const std::exception& e) {

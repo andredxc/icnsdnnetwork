@@ -4,6 +4,7 @@ from random import randint
 from ndn.experiments.experiment import Experiment
 
 c_strEportCmd = 'export HOME=/home/osboxes/ && '
+c_strAppName  = 'C2Data'
 
 class RandomTalks(Experiment):
 
@@ -32,27 +33,38 @@ class RandomTalks(Experiment):
       for nIteration in range(0, nInterests):
          # Generate producer/consumer pair
          nCon        = randint(0, nHosts-1)
-         consumer    = self.net.hosts[nCon]
          strInterest = randomDataInfoFromPool(nPayloadQtd, nPoolSize)
 
          if (strInterest not in hshProducers):
             # No producer has yet been assigned to this data
             nProd = randomHostPair(nCon, nHosts)
             hshProducers[strInterest] = nProd
+            bNewProducer = True
          else:
             # Data already has a producer
             nProd = hshProducers[strInterest]
+            bNewProducer = False
 
-         producer = self.net.hosts[nProd]
+         producer    = self.net.hosts[nProd]
+         consumer    = self.net.hosts[nCon]
+         strProducer = str(producer)
+         strConsumer = str(consumer)
+         strFilter   = '/' + c_strAppName + '/' + strProducer + '/'
 
-         print('run: Selected pair, nProducer=' + nProd + '; strProducer=' + str(producer) +
-            '; nConsumer=' + nCon + '; strConsumer=' + str(consumer) + '; interest=' +
-            strInterest)
+         if (bNewProducer):
+            # Producer has not been initialized yet
+            print('[run] producer ' + strFilter + ' &')
+            producer.cmd('producer ' + strFilter + ' &')
 
-         producer.cmd('producer ' + strInterest + ' &')
-         time.sleep(1)
-         consumer.cmd('consumer ' + strInterest + ' &')
-         time.sleep(2)
+         # Run consumer for the specific data
+         strInterest = strFilter + strInterest
+         print('[run] Selected pair, nProducer=' + nProd + '; strProducer=' + strProducer +
+            '; nConsumer=' + nCon + '; strConsumer=' + strConsumer + '; interest=' + strInterest)
+
+         print('[run] consumer ' + strInterest + ' ' + strConsumer + ' &')
+         consumer.cmd('consumer ' + strInterest + ' ' + strConsumer + ' &')
+
+         time.sleep(2) # Maybe
 
    def randomHostPair(nOriginal, nHosts):
       nPair = 0
