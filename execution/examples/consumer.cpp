@@ -19,7 +19,7 @@ class Consumer
 
   private:
     void onData(const Interest&, const Data& data)     const;
-    void onNack(const Interest&m const lp::Nack& nack) const;
+    void onNack(const Interest&, const lp::Nack& nack) const;
     void onTimeout(const Interest& interest)           const;
 
   private:
@@ -50,9 +50,9 @@ void Consumer::run(std::string strInterest, std::string strNode)
   fprintf(stderr, "[Consumer::run] Consuming interest=%s; node=%s", strInterest.c_str(), strNode.c_str());
 
   interestName = Name(strInterest);
-  interestName.appendVersion();
+  // interestName.appendVersion();
 
-  interest = Interest(interestName);
+  interest = Interest(interestName);  
   interest.setCanBePrefix(false);
   interest.setMustBeFresh(true);
   interest.setInterestLifetime(6_s); // The default is 4 seconds
@@ -72,9 +72,10 @@ void Consumer::run(std::string strInterest, std::string strNode)
 
   std::cout << "Time elapsed:" << sTimeDiff << std::endl;
 
-  if (strNode.length() == 0){
+  if (strNode.length() > 0){
     // Write results to file
     snprintf(strFile, sizeof(strFile), "/tmp/minindn/%s/consumerLog.log", strNode.c_str());
+    fprintf(stderr, "[Consumer::run] writing time output to file=%s\n", strFile);
     pFile = fopen(strFile, "a");  // TODO: relative path might not work
 
     if (pFile){
@@ -94,7 +95,7 @@ void Consumer::run(std::string strInterest, std::string strNode)
 // --------------------------------------------------------------------------------
 void Consumer::onData(const Interest&, const Data& data) const
 {
-  std::cout << "Received Data " << data << std::endl;
+  std::cout << "[Consumer::onData] Received Data " << data << std::endl;
 }
 
 // --------------------------------------------------------------------------------
@@ -104,7 +105,7 @@ void Consumer::onData(const Interest&, const Data& data) const
 // --------------------------------------------------------------------------------
 void Consumer::onNack(const Interest&, const lp::Nack& nack) const
 {
-  std::cout << "Received Nack with reason " << nack.getReason() << std::endl;
+  std::cout << "[Consumer::onNack] Received Nack with reason " << nack.getReason() << std::endl;
 }
 
 // --------------------------------------------------------------------------------
@@ -114,7 +115,7 @@ void Consumer::onNack(const Interest&, const lp::Nack& nack) const
 // --------------------------------------------------------------------------------
 void Consumer::onTimeout(const Interest& interest) const
 {
-  std::cout << "Timeout for " << interest << std::endl;
+  std::cout << "[Consumer::onTimeout] Timeout for " << interest << std::endl;
 }
 
 } // namespace examples
@@ -141,7 +142,7 @@ int main(int argc, char** argv)
     return 0;
   }
   catch (const std::exception& e) {
-    std::cerr << "ERROR: " << e.what() << std::endl;
+    std::cerr << "[main] ERROR: " << e.what() << std::endl;
     return 1;
   }
 }

@@ -7,7 +7,7 @@
 #include <ndn-cxx/face.hpp>
 #include <ndn-cxx/security/key-chain.hpp>
 #include <ndn-cxx/security/signing-helpers.hpp>
-
+#include <libgen.h>
 #include <iostream>
 
 #define STR_APPNAME "C2Data"
@@ -38,14 +38,12 @@ class Producer
 // --------------------------------------------------------------------------------
 void Producer::run(std::string strFilter)
 {
-  int nParams, nID;
-
   if (strFilter.length() == 0){
     // No specific filter set
     strFilter = "/exampleApp/blup";
   }
 
-  fprintf(stderr, "[Producer::run] Producer for filter=%s", strFilter.c_str())
+  fprintf(stderr, "[Producer::run] Producer for filter=%s\n", strFilter.c_str());
 
   // strInterest = '/' + c_strAppName + '/' + str(producer) + '/' + strInterest
   m_face.setInterestFilter(strFilter,
@@ -64,25 +62,37 @@ void Producer::onInterest(const InterestFilter&, const Interest& interest)
 {
   static std::string strContent; // This used to be a const, might be a problem
   int nType, nID, nRead;
-  auto data;
+  std::string strPacket;
 
-  std::cout << ">> I: " << interest << std::endl;
+  std::cout << "[Producer::onInterest] >> I: " << interest << std::endl;  
+  // interest.toUri() results in the same thing
+  // Format: /drone/%FD%00...AF?MustBeFresh&Nonce=43a724&Lifetime=6000
 
-  nRead = sscanf(interest, "C2Data-%d-Type%d", &nID, &nType)
+  std::cout << "[Producer::onInterest] getName().toUri() = " << interest.getName().toUri() << std::endl;
+
+
+  nRead = sscanf(basename((char*) interest.getName().toUri().c_str()), "C2Data-%d-Type%d", &nID, &nType);
 
   if (nRead > 0){
     // Use C2 data
     strContent = "C2Data";
+    printf("[Producer::onInterest] C2Data\n");
   }
   else{
     // Use random data to keep retro-compatibility
     strContent = "Hello, world!";
+    printf("[Producer::onInterest] Normal data\n");
   }
 
   // Create Data packet
-  data = make_shared<Data>(interest.getName());
+  const char *pMyData = (char*) malloc(100);
+
+  auto data = make_shared<Data>(interest.getName());
   data->setFreshnessPeriod(10_s);
-  data->setContent(reinterpret_cast<const uint8_t*>(strContent.data()), strContent.size());
+  // data->setContent(reinterpret_cast<const uint8_t*>(strContent.data()), strContent.size());
+  data->setContent(reinterpret_cast<const uint8_t*>(pMyData), 100);
+
+  // data did not work, might need to be const as originally
 
   // Sign Data packet with default identity
   m_keyChain.sign(*data);
@@ -103,7 +113,7 @@ void Producer::onInterest(const InterestFilter&, const Interest& interest)
 // --------------------------------------------------------------------------------
 void Producer::onRegisterFailed(const Name& prefix, const std::string& reason)
 {
-  std::cerr << "ERROR: Failed to register prefix '" << prefix
+  std::cerr << "[Producer::onRegisterFaile] ERROR: Failed to register prefix '" << prefix
             << "' with the local forwarder (" << reason << ")" << std::endl;
   m_face.shutdown();
 }
@@ -130,7 +140,7 @@ int main(int argc, char** argv)
     return 0;
   }
   catch (const std::exception& e) {
-    std::cerr << "ERROR: " << e.what() << std::endl;
+    std::cerr << "[main] ERROR: " << e.what() << std::endl;
     return 1;
   }
 }
