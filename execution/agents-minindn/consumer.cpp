@@ -52,7 +52,7 @@ void Consumer::run(std::string strInterest, std::string strNode)
   interestName = Name(strInterest);
   // interestName.appendVersion();
 
-  interest = Interest(interestName);  
+  interest = Interest(interestName);
   interest.setCanBePrefix(false);
   interest.setMustBeFresh(true);
   interest.setInterestLifetime(6_s); // The default is 4 seconds

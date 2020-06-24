@@ -60,39 +60,35 @@ void Producer::run(std::string strFilter)
 // --------------------------------------------------------------------------------
 void Producer::onInterest(const InterestFilter&, const Interest& interest)
 {
-  static std::string strContent; // This used to be a const, might be a problem
   int nType, nID, nRead;
   std::string strPacket;
 
-  std::cout << "[Producer::onInterest] >> I: " << interest << std::endl;  
+  std::cout << "[Producer::onInterest] >> I: " << interest << std::endl;
   // interest.toUri() results in the same thing
   // Format: /drone/%FD%00...AF?MustBeFresh&Nonce=43a724&Lifetime=6000
 
-  std::cout << "[Producer::onInterest] getName().toUri() = " << interest.getName().toUri() << std::endl;
-
-
-  nRead = sscanf(basename((char*) interest.getName().toUri().c_str()), "C2Data-%d-Type%d", &nID, &nType);
+  strPacket = interest.getName().toUri();
+  nRead     = sscanf(basename((char*) strPacket.c_str()), "C2Data-%d-Type%d", &nID, &nType);
+  printf("[Producer::onInterest] Interest for packet=%s", strPacket.c_str());
 
   if (nRead > 0){
     // Use C2 data
-    strContent = "C2Data";
-    printf("[Producer::onInterest] C2Data\n");
+    static const strContent = "C2Data";
+    printf("[Producer::onInterest] C2Data id=%d; type=%d\n", nId, nType);
   }
   else{
     // Use random data to keep retro-compatibility
-    strContent = "Hello, world!";
+    static const strContent = "Hello, world!";
     printf("[Producer::onInterest] Normal data\n");
   }
 
   // Create Data packet
   const char *pMyData = (char*) malloc(100);
-
   auto data = make_shared<Data>(interest.getName());
+  // TODO: Switch between freshness values depending on C2Data type
   data->setFreshnessPeriod(10_s);
   // data->setContent(reinterpret_cast<const uint8_t*>(strContent.data()), strContent.size());
   data->setContent(reinterpret_cast<const uint8_t*>(pMyData), 100);
-
-  // data did not work, might need to be const as originally
 
   // Sign Data packet with default identity
   m_keyChain.sign(*data);
