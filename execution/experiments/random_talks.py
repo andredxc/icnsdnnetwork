@@ -20,10 +20,10 @@ class RandomTalks(Experiment):
 
       # User defined experiment parameters
       nInterests  = 100
-      nPoolSize   = 100
+      nPoolSize   = 60
       nPayloadQtd = 6
-      print('Running, nInterests=' + nInterests + '; nPoolSize=' + nPoolSize +
-         '; nPayloadQtd=' + nPayloadQtd)
+      print('Running, nInterests=' + str(nInterests) + '; nPoolSize=' + str(nPoolSize) +
+         '; nPayloadQtd=' + str(nPayloadQtd))
 
       # Other parameters
       nHosts       = len(self.net.hosts)
@@ -31,13 +31,15 @@ class RandomTalks(Experiment):
 
       # Select producer/consumer pairs
       for nIteration in range(0, nInterests):
+
+         print('[run] Iteration ' + str(nIteration) + '/' + str(nInterests-1) + '--------------------')
          # Generate producer/consumer pair
          nCon        = randint(0, nHosts-1)
-         strInterest = randomDataInfoFromPool(nPayloadQtd, nPoolSize)
+         strInterest = self.randomDataInfoFromPool(nPayloadQtd, nPoolSize)
 
          if (strInterest not in hshProducers):
             # No producer has yet been assigned to this data
-            nProd = randomHostPair(nCon, nHosts)
+            nProd = self.randomHostPair(nCon, nHosts)
             hshProducers[strInterest] = nProd
             bNewProducer = True
          else:
@@ -58,15 +60,15 @@ class RandomTalks(Experiment):
 
          # Run consumer for the specific data
          strInterest = strFilter + strInterest
-         print('[run] Selected pair, nProducer=' + nProd + '; strProducer=' + strProducer +
-            '; nConsumer=' + nCon + '; strConsumer=' + strConsumer + '; interest=' + strInterest)
+         print('[run] Selected pair, nProducer=' + str(nProd) + '; strProducer=' + strProducer +
+            '; nConsumer=' + str(nCon) + '; strConsumer=' + strConsumer + '; interest=' + strInterest)
 
          print('[run] consumer ' + strInterest + ' ' + strConsumer + ' &')
          consumer.cmd('consumer ' + strInterest + ' ' + strConsumer + ' &')
 
          time.sleep(2) # Maybe
 
-   def randomHostPair(nOriginal, nHosts):
+   def randomHostPair(self, nOriginal, nHosts):
       nPair = 0
       if (nHosts > 1):
          while (True):
@@ -76,7 +78,7 @@ class RandomTalks(Experiment):
       else:
          return 0
 
-   def selectProducerConsumer(nHosts):
+   def selectProducerConsumer(self, nHosts):
       """
       Randomly select a non-equal producer-consumer pair
       :return indexes for producer and consumer
@@ -95,25 +97,22 @@ class RandomTalks(Experiment):
       else:
          return (0,0)
 
-   def randomDataInfoFromPool(nPayloadQtd, nPoolSize):
+   def randomDataInfoFromPool(self, nPayloadQtd, nPoolSize):
       """
       Generate C2 data info.
       """
 
       if (nPoolSize % nPayloadQtd != 0):
-         print('randomDataInfoFromPool: Payload times not evenly distributed')
-         raise ArgumentError
+         print('[RandomTalks:randomDataInfoFromPool] Payload times not evenly distributed ' +
+            'poolSize=' + str(nPoolSize) + '; payloadQtd=' + str(nPayloadQtd))
+         raise Exception
 
       # Determine which package it is
       nPackagesPerType = nPoolSize / nPayloadQtd
-      nPackageID       = randint(0, nPackagesPerType)
-      nPackageType     = rand(0, nPayloadQtd-1)
-      strPackageName   = 'C2Data-' + nPackageID + '-Type' + nPackageType
+      nPackageID       = randint(0, nPackagesPerType-1)
+      nPackageType     = randint(0, nPayloadQtd-1)
+      strPackageName   = 'C2Data-' + str(nPackageID) + '-Type' + str(nPackageType)
       return strPackageName
-
-
-
-
 
 
 Experiment.register("random-talks", RandomTalks)
