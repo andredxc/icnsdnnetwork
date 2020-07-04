@@ -59,7 +59,7 @@ cabeçalho
 
 - Variando o cabeçalho e a taxa de perda nos enlaces, vale mais a pena procurar pelos valores do WIFI IMAX (ou algo parecido), que é o protocolo usado no militar
 
-Nova reunião:
+Runião 26/06/2020
 
 o que eu fiz
   - producer
@@ -70,7 +70,6 @@ o que ficou na minha cabeça
   - tempos de ttl considerando inexistencia de um tempo virtual no MiniNDN
   - taxas do imax (perda e payload)
 
-
-  diferenciar perdas de enlace e por TTL
+- diferenciar perdas de enlace e por TTL
   fazer alguma simulação pequena pra ter um feeling dos tempos
     - ex instanciar varios pacotes do mesmo tipo (mesmo TTL) em um experimento simples e ver quanto expiram.

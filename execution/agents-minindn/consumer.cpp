@@ -1,5 +1,5 @@
 /*
-*   Vanilla consumer for MiniNDN
+*    Based on Vanilla consumer for MiniNDN
 *
 *
 */
@@ -14,108 +14,151 @@ namespace examples {
 
 class Consumer
 {
-  public:
-    void run(std::string strInterest, std::string strNode);
+   public:
+      void run(std::string strInterest, std::string strNode);
 
-  private:
-    void onData(const Interest&, const Data& data)     const;
-    void onNack(const Interest&, const lp::Nack& nack) const;
-    void onTimeout(const Interest& interest)           const;
+   private:
+      void onData(const Interest&, const Data& data)       const;
+      void onNack(const Interest&, const lp::Nack& nack)   const;
+      void onTimeout(const Interest& interest)             const;
+      void logResult(float sTimeDiff, const char* pResult) const;
 
-  private:
-    Face m_face;
-    std::string m_strNode;
+   private:
+      Face m_face;
+      std::string m_strNode;
+      std::string m_strInterest;
+      std::string m_strLogPath;
+      std::chrono::steady_clock::time_point m_dtBegin;
 };
 
 // --------------------------------------------------------------------------------
-//  run
+//   run
 //
 //
 // --------------------------------------------------------------------------------
 void Consumer::run(std::string strInterest, std::string strNode)
 {
-  Name     interestName;
-  Interest interest;
-  float    sTimeDiff;
-  FILE*    pFile;
-  char     strFile[50];
-  std::chrono::steady_clock::time_point dtBegin;
-  std::chrono::steady_clock::time_point dtEnd;
+   Name     interestName;
+   Interest interest;
+   FILE*    pFile;
+   char     strFile[50];
+   std::chrono::steady_clock::time_point dtBegin;
 
-  if (strInterest.length() == 0){
-    // No specific interest given as parameter
-    strInterest = "/example/testApp2/randomData";
-  }
+   if (strInterest.length() == 0){
+      // No specific interest given as parameter
+      strInterest = "/example/testApp/randomDataAndre";
+   }
 
-  fprintf(stderr, "[Consumer::run] Consuming interest=%s; node=%s", strInterest.c_str(), strNode.c_str());
+   m_strNode     = strNode;
+   m_strInterest = strInterest;
+   m_strLogPath  = "/tmp/minindn/" + m_strNode + "/consumerLog.log";
 
-  interestName = Name(strInterest);
-  // interestName.appendVersion();
+   std::cout << "[Consumer::run] Consuming interest=" << m_strInterest << "; node=" << m_strNode << std::endl;
 
-  interest = Interest(interestName);
-  interest.setCanBePrefix(false);
-  interest.setMustBeFresh(true);
-  interest.setInterestLifetime(6_s); // The default is 4 seconds
+   interestName = Name(m_strInterest);
+   // interestName.appendVersion();
 
-  dtBegin = std::chrono::steady_clock::now();
-  m_face.expressInterest(interest,
-                         bind(&Consumer::onData, this,  _1, _2),
-                         bind(&Consumer::onNack, this, _1, _2),
-                         bind(&Consumer::onTimeout, this, _1));
+   interest = Interest(interestName);
+   interest.setCanBePrefix(false);
+   interest.setMustBeFresh(true);
+   interest.setInterestLifetime(6_s); // The default is 4 seconds
 
-  std::cout << "Sending Interest " << interest << std::endl;
-  // processEvents will block until the requested data is received or a timeout occurs
-  m_face.processEvents();
+   dtBegin   = std::chrono::steady_clock::now();
+   m_dtBegin = dtBegin;
+   m_face.expressInterest(interest, bind(&Consumer::onData, this,   _1, _2), 
+      bind(&Consumer::onNack, this, _1, _2), bind(&Consumer::onTimeout, this, _1));
 
-  dtEnd      = std::chrono::steady_clock::now();
-  sTimeDiff  = std::chrono::duration_cast<std::chrono::microseconds>(dtEnd - dtBegin).count();
+   std::cout << "[Consumer::run] Sending Interest=" << interest << std::endl;
+   // processEvents will block until the requested data is received or a timeout occurs
+   m_face.processEvents();
 
-  std::cout << "Time elapsed:" << sTimeDiff << std::endl;
-
-  if (strNode.length() > 0){
-    // Write results to file
-    snprintf(strFile, sizeof(strFile), "/tmp/minindn/%s/consumerLog.log", strNode.c_str());
-    fprintf(stderr, "[Consumer::run] writing time output to file=%s\n", strFile);
-    pFile = fopen(strFile, "a");  // TODO: relative path might not work
-
-    if (pFile){
-      fprintf(pFile, "%s;%.3f", strInterest.c_str(), sTimeDiff);
-      fclose(pFile);
-    }
-    else{
-      std::cout << "Consumer::run ERROR opening output file" << std::endl;
-    }
-  }
+   std::cout << "[Consumer::run] Done" << std::endl;
 }
 
 // --------------------------------------------------------------------------------
-//  onData
+//   onData
 //
 //
 // --------------------------------------------------------------------------------
 void Consumer::onData(const Interest&, const Data& data) const
 {
-  std::cout << "[Consumer::onData] Received Data " << data << std::endl;
+   float sTimeDiff;
+   FILE* pFile;
+   std::chrono::steady_clock::time_point dtEnd;
+
+   dtEnd     = std::chrono::steady_clock::now();
+   sTimeDiff = std::chrono::duration_cast<std::chrono::microseconds>(dtEnd - m_dtBegin).count();
+
+   logResult(sTimeDiff, "DATA");
+
+   std::cout << "[Consumer::onData] Received Data=" << data << "Delay=" << sTimeDiff << 
+      std::endl;
 }
 
 // --------------------------------------------------------------------------------
-//  onNack
+//   onNack
 //
 //
 // --------------------------------------------------------------------------------
 void Consumer::onNack(const Interest&, const lp::Nack& nack) const
 {
-  std::cout << "[Consumer::onNack] Received Nack with reason " << nack.getReason() << std::endl;
+   float sTimeDiff;
+   FILE* pFile;
+   std::chrono::steady_clock::time_point dtEnd;
+
+   dtEnd     = std::chrono::steady_clock::now();
+   sTimeDiff = std::chrono::duration_cast<std::chrono::microseconds>(dtEnd - m_dtBegin).count();
+
+   logResult(sTimeDiff, "NACK");
+
+   std::cout << "[Consumer::onNack] Received Nack interest=" << m_strInterest << 
+      ";Reason=" << nack.getReason() << "Delay=" << sTimeDiff << std::endl;
 }
 
 // --------------------------------------------------------------------------------
-//  onTimeout
+//   onTimeout
 //
 //
 // --------------------------------------------------------------------------------
 void Consumer::onTimeout(const Interest& interest) const
 {
-  std::cout << "[Consumer::onTimeout] Timeout for " << interest << std::endl;
+   std::cout << "[Consumer::onTimeout] Timeout for " << interest << std::endl;
+
+   float sTimeDiff;
+   FILE* pFile;
+   std::chrono::steady_clock::time_point dtEnd;
+
+   dtEnd     = std::chrono::steady_clock::now();
+   sTimeDiff = std::chrono::duration_cast<std::chrono::microseconds>(dtEnd - m_dtBegin).count();
+
+   logResult(sTimeDiff, "TIMEOUT");
+
+   std::cout << "[Consumer::onTimeout] Timeout for interest=" << m_strInterest << "Delay=" 
+      << sTimeDiff << std::endl;
+}
+
+// --------------------------------------------------------------------------------
+//   logResult
+//
+//
+// --------------------------------------------------------------------------------
+void Consumer::logResult(float sTimeDiff, const char* pResult) const
+{
+   FILE* pFile;
+
+   if (m_strNode.length() > 0){
+      // Write results to file
+      pFile = fopen(m_strLogPath.c_str(), "a");
+
+      if (pFile){
+         fprintf(pFile, "%s;%.4f;%s", m_strInterest.c_str(), sTimeDiff, pResult);
+         fclose(pFile);
+      }
+      else{
+         std::cout << "[Consumer::log] ERROR opening output file for pResult=" << pResult
+             << std::endl;
+      }
+   }
 }
 
 } // namespace examples
@@ -123,26 +166,26 @@ void Consumer::onTimeout(const Interest& interest) const
 
 int main(int argc, char** argv)
 {
-  std::string strInterest;
-  std::string strNode;
+   std::string strInterest;
+   std::string strNode;
 
-  if (argc > 2){
-    // Use explicit interest and node name
-    strInterest = argv[1];
-    strNode     = argv[2];
-  }
-  else{
-    strInterest = "";
-    strNode     = "";
-  }
+   if (argc > 2){
+      // Use explicit interest and node name
+      strInterest = argv[1];
+      strNode       = argv[2];
+   }
+   else{
+      strInterest = "";
+      strNode       = "";
+   }
 
-  try {
-    ndn::examples::Consumer consumer;
-    consumer.run(strInterest, strNode);
-    return 0;
-  }
-  catch (const std::exception& e) {
-    std::cerr << "[main] ERROR: " << e.what() << std::endl;
-    return 1;
-  }
+   try {
+      ndn::examples::Consumer consumer;
+      consumer.run(strInterest, strNode);
+      return 0;
+   }
+   catch (const std::exception& e) {
+      std::cerr << "[main] ERROR: " << e.what() << std::endl;
+      return 1;
+   }
 }

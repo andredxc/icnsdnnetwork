@@ -92,8 +92,6 @@ class RandomTalks(Experiment):
    def selectProducerConsumer(self, nHosts):
       """
       Randomly select a non-equal producer-consumer pair
-      :return indexes for producer and consumer
-      :rtype tuple of (int, int)
       """
       if(nHosts > 1):
          bDone     = False
