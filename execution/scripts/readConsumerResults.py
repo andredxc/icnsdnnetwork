@@ -1,7 +1,7 @@
 """
 Reads the raw results written by MiniNDN consumers.
 
-André Dexheimer Carneiro        04/07/2020
+Andre Dexheimer Carneiro        04/07/2020
 """
 import os
 
@@ -20,7 +20,7 @@ def readResultFile(File):
         lstContents = strLine.split(';')
         if (len(lstContents) != 3):
             print('[readResultFile] line with more than 3 fields line=' + strLine)
-        else
+        else:
             print('[readResultFile] (' + lstContents[0] + ', ' + lstContents[1] + ', ' + lstContents[2] + ')')
             lstLines.append(lstContents)
     
@@ -34,7 +34,7 @@ hshNodes = {}
 for strNode in lstNodes:
     # Read result file for each node
     try:
-        File = open(c_strBasePath + '/' + strNode + '/' + c_strFileName. 'r')
+        File = open(c_strBasePath + '/' + strNode + '/' + c_strFileName, 'r')
         print('[main] reading results for node=' + strNode)
         hshNodes[strNode] = readResultFile(File)
         close(File)

@@ -1,0 +1,309 @@
+[RandomTalks.setup] Node: a
+[RandomTalks.setup] Node: b
+[RandomTalks.setup] Node: c
+[RandomTalks.setup] Node: d
+[RandomTalks.run] Running, nInterests=100; nPoolSize=60; nPayloadQtd=6
+[RandomTalks.run] Iteration 0/99--------------------
+[RandomTalks.run] instantiating new producer /C2Data/a/ &
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-9-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-9-Type0 c &
+[RandomTalks.run] Iteration 1/99--------------------
+[RandomTalks.run] instantiating new producer /C2Data/d/ &
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=2; strConsumer=c; interest=/C2Data/d/C2Data-7-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-7-Type4 c &
+[RandomTalks.run] Iteration 2/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-7-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-7-Type3 a &
+[RandomTalks.run] Iteration 3/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-7-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-7-Type2 b &
+[RandomTalks.run] Iteration 4/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-9-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-9-Type2 c &
+[RandomTalks.run] Iteration 5/99--------------------
+[RandomTalks.run] instantiating new producer /C2Data/b/ &
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-8-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-8-Type4 d &
+[RandomTalks.run] Iteration 6/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=1; strConsumer=b; interest=/C2Data/d/C2Data-7-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-7-Type3 b &
+[RandomTalks.run] Iteration 7/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=0; strConsumer=a; interest=/C2Data/b/C2Data-9-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-9-Type3 a &
+[RandomTalks.run] Iteration 8/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-5-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-5-Type4 b &
+[RandomTalks.run] Iteration 9/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-3-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-3-Type1 c &
+[RandomTalks.run] Iteration 10/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-1-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-1-Type2 c &
+[RandomTalks.run] Iteration 11/99--------------------
+[RandomTalks.run] instantiating new producer /C2Data/c/ &
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=3; strConsumer=d; interest=/C2Data/c/C2Data-1-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-1-Type0 d &
+[RandomTalks.run] Iteration 12/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=0; strConsumer=a; interest=/C2Data/c/C2Data-9-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-9-Type2 a &
+[RandomTalks.run] Iteration 13/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=0; strConsumer=a; interest=/C2Data/b/C2Data-5-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-5-Type1 a &
+[RandomTalks.run] Iteration 14/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=1; strConsumer=b; interest=/C2Data/c/C2Data-1-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-1-Type2 b &
+[RandomTalks.run] Iteration 15/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-9-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-9-Type2 d &
+[RandomTalks.run] Iteration 16/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-2-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-2-Type5 b &
+[RandomTalks.run] Iteration 17/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=2; strConsumer=c; interest=/C2Data/d/C2Data-1-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-1-Type2 c &
+[RandomTalks.run] Iteration 18/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=1; strConsumer=b; interest=/C2Data/c/C2Data-9-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-9-Type2 b &
+[RandomTalks.run] Iteration 19/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=0; strConsumer=a; interest=/C2Data/c/C2Data-0-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-0-Type1 a &
+[RandomTalks.run] Iteration 20/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-1-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-1-Type0 c &
+[RandomTalks.run] Iteration 21/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=1; strConsumer=b; interest=/C2Data/d/C2Data-8-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-8-Type1 b &
+[RandomTalks.run] Iteration 22/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-6-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-6-Type4 c &
+[RandomTalks.run] Iteration 23/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-2-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-2-Type2 c &
+[RandomTalks.run] Iteration 24/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-6-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-6-Type0 c &
+[RandomTalks.run] Iteration 25/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-1-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-1-Type3 a &
+[RandomTalks.run] Iteration 26/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=3; strConsumer=d; interest=/C2Data/a/C2Data-8-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-8-Type4 d &
+[RandomTalks.run] Iteration 27/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-1-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-1-Type3 b &
+[RandomTalks.run] Iteration 28/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-2-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-2-Type4 c &
+[RandomTalks.run] Iteration 29/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-5-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-5-Type0 b &
+[RandomTalks.run] Iteration 30/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=0; strConsumer=a; interest=/C2Data/c/C2Data-5-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-5-Type0 a &
+[RandomTalks.run] Iteration 31/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-0-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-0-Type4 a &
+[RandomTalks.run] Iteration 32/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-5-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-5-Type5 c &
+[RandomTalks.run] Iteration 33/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=0; strConsumer=a; interest=/C2Data/b/C2Data-5-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-5-Type0 a &
+[RandomTalks.run] Iteration 34/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=1; strConsumer=b; interest=/C2Data/c/C2Data-6-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-6-Type1 b &
+[RandomTalks.run] Iteration 35/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=1; strConsumer=b; interest=/C2Data/d/C2Data-1-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-1-Type2 b &
+[RandomTalks.run] Iteration 36/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-5-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-5-Type3 c &
+[RandomTalks.run] Iteration 37/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-6-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-6-Type3 d &
+[RandomTalks.run] Iteration 38/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-2-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-2-Type3 c &
+[RandomTalks.run] Iteration 39/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-1-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-1-Type2 b &
+[RandomTalks.run] Iteration 40/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-8-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-8-Type0 b &
+[RandomTalks.run] Iteration 41/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-5-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-5-Type0 c &
+[RandomTalks.run] Iteration 42/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-0-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-0-Type5 a &
+[RandomTalks.run] Iteration 43/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-1-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-1-Type3 c &
+[RandomTalks.run] Iteration 44/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-1-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-1-Type0 a &
+[RandomTalks.run] Iteration 45/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-6-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-6-Type0 a &
+[RandomTalks.run] Iteration 46/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-8-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-8-Type0 d &
+[RandomTalks.run] Iteration 47/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=1; strConsumer=b; interest=/C2Data/c/C2Data-3-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-3-Type4 b &
+[RandomTalks.run] Iteration 48/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=3; strConsumer=d; interest=/C2Data/a/C2Data-8-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-8-Type1 d &
+[RandomTalks.run] Iteration 49/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=3; strConsumer=d; interest=/C2Data/a/C2Data-1-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-1-Type5 d &
+[RandomTalks.run] Iteration 50/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=3; strConsumer=d; interest=/C2Data/a/C2Data-8-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-8-Type0 d &
+[RandomTalks.run] Iteration 51/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-0-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-0-Type0 b &
+[RandomTalks.run] Iteration 52/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-5-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-5-Type0 b &
+[RandomTalks.run] Iteration 53/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=0; strConsumer=a; interest=/C2Data/b/C2Data-6-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-6-Type0 a &
+[RandomTalks.run] Iteration 54/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=1; strConsumer=b; interest=/C2Data/d/C2Data-8-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-8-Type4 b &
+[RandomTalks.run] Iteration 55/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-5-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-5-Type3 d &
+[RandomTalks.run] Iteration 56/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-5-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-5-Type0 d &
+[RandomTalks.run] Iteration 57/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=1; strConsumer=b; interest=/C2Data/d/C2Data-8-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-8-Type4 b &
+[RandomTalks.run] Iteration 58/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-7-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-7-Type4 c &
+[RandomTalks.run] Iteration 59/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=3; strConsumer=d; interest=/C2Data/c/C2Data-2-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-2-Type1 d &
+[RandomTalks.run] Iteration 60/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-6-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-6-Type1 c &
+[RandomTalks.run] Iteration 61/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=3; strConsumer=d; interest=/C2Data/c/C2Data-6-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-6-Type5 d &
+[RandomTalks.run] Iteration 62/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-3-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-3-Type5 c &
+[RandomTalks.run] Iteration 63/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-2-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-2-Type5 c &
+[RandomTalks.run] Iteration 64/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-6-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-6-Type4 c &
+[RandomTalks.run] Iteration 65/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=3; strConsumer=d; interest=/C2Data/c/C2Data-1-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-1-Type3 d &
+[RandomTalks.run] Iteration 66/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-6-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-6-Type2 a &
+[RandomTalks.run] Iteration 67/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=0; strConsumer=a; interest=/C2Data/b/C2Data-2-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-2-Type1 a &
+[RandomTalks.run] Iteration 68/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=1; strConsumer=b; interest=/C2Data/d/C2Data-0-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-0-Type5 b &
+[RandomTalks.run] Iteration 69/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=2; strConsumer=c; interest=/C2Data/a/C2Data-0-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-0-Type1 c &
+[RandomTalks.run] Iteration 70/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-8-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-8-Type0 c &
+[RandomTalks.run] Iteration 71/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-2-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-2-Type2 b &
+[RandomTalks.run] Iteration 72/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-9-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-9-Type3 c &
+[RandomTalks.run] Iteration 73/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=0; strConsumer=a; interest=/C2Data/c/C2Data-5-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-5-Type4 a &
+[RandomTalks.run] Iteration 74/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-1-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-1-Type4 c &
+[RandomTalks.run] Iteration 75/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=0; strConsumer=a; interest=/C2Data/c/C2Data-7-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-7-Type0 a &
+[RandomTalks.run] Iteration 76/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=0; strConsumer=a; interest=/C2Data/b/C2Data-0-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-0-Type0 a &
+[RandomTalks.run] Iteration 77/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=2; strConsumer=c; interest=/C2Data/d/C2Data-2-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-2-Type3 c &
+[RandomTalks.run] Iteration 78/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=2; strConsumer=c; interest=/C2Data/d/C2Data-8-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-8-Type2 c &
+[RandomTalks.run] Iteration 79/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-6-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-6-Type3 a &
+[RandomTalks.run] Iteration 80/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-9-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-9-Type4 c &
+[RandomTalks.run] Iteration 81/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-8-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-8-Type4 d &
+[RandomTalks.run] Iteration 82/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=1; strConsumer=b; interest=/C2Data/c/C2Data-4-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-4-Type1 b &
+[RandomTalks.run] Iteration 83/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-0-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-0-Type4 c &
+[RandomTalks.run] Iteration 84/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-2-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-2-Type5 d &
+[RandomTalks.run] Iteration 85/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-9-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-9-Type0 b &
+[RandomTalks.run] Iteration 86/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=2; strConsumer=c; interest=/C2Data/d/C2Data-3-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-3-Type3 c &
+[RandomTalks.run] Iteration 87/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=1; strConsumer=b; interest=/C2Data/d/C2Data-7-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-7-Type2 b &
+[RandomTalks.run] Iteration 88/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=1; strConsumer=b; interest=/C2Data/d/C2Data-7-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-7-Type1 b &
+[RandomTalks.run] Iteration 89/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-8-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-8-Type4 d &
+[RandomTalks.run] Iteration 90/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=3; strConsumer=d; interest=/C2Data/a/C2Data-4-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-4-Type3 d &
+[RandomTalks.run] Iteration 91/99--------------------
+[RandomTalks.run] Selected pair, nProducer=2; strProducer=c; nConsumer=3; strConsumer=d; interest=/C2Data/c/C2Data-6-Type4
+[RandomTalks.run] instantiating new consumer /C2Data/c/C2Data-6-Type4 d &
+[RandomTalks.run] Iteration 92/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-7-Type2
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-7-Type2 b &
+[RandomTalks.run] Iteration 93/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-6-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-6-Type3 d &
+[RandomTalks.run] Iteration 94/99--------------------
+[RandomTalks.run] Selected pair, nProducer=0; strProducer=a; nConsumer=1; strConsumer=b; interest=/C2Data/a/C2Data-7-Type3
+[RandomTalks.run] instantiating new consumer /C2Data/a/C2Data-7-Type3 b &
+[RandomTalks.run] Iteration 95/99--------------------
+[RandomTalks.run] Selected pair, nProducer=3; strProducer=d; nConsumer=0; strConsumer=a; interest=/C2Data/d/C2Data-2-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/d/C2Data-2-Type0 a &
+[RandomTalks.run] Iteration 96/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-2-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-2-Type1 c &
+[RandomTalks.run] Iteration 97/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=3; strConsumer=d; interest=/C2Data/b/C2Data-9-Type1
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-9-Type1 d &
+[RandomTalks.run] Iteration 98/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-8-Type5
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-8-Type5 c &
+[RandomTalks.run] Iteration 99/99--------------------
+[RandomTalks.run] Selected pair, nProducer=1; strProducer=b; nConsumer=2; strConsumer=c; interest=/C2Data/b/C2Data-9-Type0
+[RandomTalks.run] instantiating new consumer /C2Data/b/C2Data-9-Type0 c &

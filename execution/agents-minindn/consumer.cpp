@@ -6,6 +6,7 @@
 #include <ndn-cxx/face.hpp>
 #include <iostream>
 #include <chrono>
+#include <ctime>
 
 // Enclosing code in ndn simplifies coding (can also use `using namespace ndn`)
 namespace ndn {
@@ -38,11 +39,10 @@ class Consumer
 // --------------------------------------------------------------------------------
 void Consumer::run(std::string strInterest, std::string strNode)
 {
-   Name     interestName;
-   Interest interest;
-   FILE*    pFile;
-   char     strFile[50];
-   std::chrono::steady_clock::time_point dtBegin;
+   Name        interestName;
+   Interest    interest;
+   // time_t      dtNow;
+   // struct tm*  pTimeInfo;
 
    if (strInterest.length() == 0){
       // No specific interest given as parameter
@@ -51,6 +51,13 @@ void Consumer::run(std::string strInterest, std::string strNode)
 
    m_strNode     = strNode;
    m_strInterest = strInterest;
+
+   // Get current time for log file
+   // time(&dtNow);
+   // pTimeInfo = localtime(&dtNow);
+   // strNow = ctime(&dtNow);
+   // strftime (buffer, 80 ,"Now it's %I:%M%p.",timeinfo);
+   // m_strLogPath  = "/tmp/minindn/" + m_strNode + "/consumerLog" + ctime(&ctime) + ".log";
    m_strLogPath  = "/tmp/minindn/" + m_strNode + "/consumerLog.log";
 
    std::cout << "[Consumer::run] Consuming interest=" << m_strInterest << "; node=" << m_strNode << std::endl;
@@ -63,8 +70,7 @@ void Consumer::run(std::string strInterest, std::string strNode)
    interest.setMustBeFresh(true);
    interest.setInterestLifetime(6_s); // The default is 4 seconds
 
-   dtBegin   = std::chrono::steady_clock::now();
-   m_dtBegin = dtBegin;
+   m_dtBegin = std::chrono::steady_clock::now();;
    m_face.expressInterest(interest, bind(&Consumer::onData, this,   _1, _2), 
       bind(&Consumer::onNack, this, _1, _2), bind(&Consumer::onTimeout, this, _1));
 
@@ -83,7 +89,6 @@ void Consumer::run(std::string strInterest, std::string strNode)
 void Consumer::onData(const Interest&, const Data& data) const
 {
    float sTimeDiff;
-   FILE* pFile;
    std::chrono::steady_clock::time_point dtEnd;
 
    dtEnd     = std::chrono::steady_clock::now();
@@ -103,7 +108,6 @@ void Consumer::onData(const Interest&, const Data& data) const
 void Consumer::onNack(const Interest&, const lp::Nack& nack) const
 {
    float sTimeDiff;
-   FILE* pFile;
    std::chrono::steady_clock::time_point dtEnd;
 
    dtEnd     = std::chrono::steady_clock::now();
@@ -151,7 +155,7 @@ void Consumer::logResult(float sTimeDiff, const char* pResult) const
       pFile = fopen(m_strLogPath.c_str(), "a");
 
       if (pFile){
-         fprintf(pFile, "%s;%.4f;%s", m_strInterest.c_str(), sTimeDiff, pResult);
+         fprintf(pFile, "%s;%.4f;%s\n", m_strInterest.c_str(), sTimeDiff, pResult);
          fclose(pFile);
       }
       else{
