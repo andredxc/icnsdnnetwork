@@ -73,12 +73,12 @@ void Producer::onInterest(const InterestFilter&, const Interest& interest)
 
   if (nRead > 0){
     // Use C2 data
-    static const strContent = "C2Data";
-    printf("[Producer::onInterest] C2Data id=%d; type=%d\n", nId, nType);
+    static const std::string strContent = "C2Data";
+    printf("[Producer::onInterest] C2Data id=%d; type=%d\n", nID, nType);
   }
   else{
     // Use random data to keep retro-compatibility
-    static const strContent = "Hello, world!";
+    static const std::string strContent = "Hello, world!";
     printf("[Producer::onInterest] Normal data\n");
   }
 

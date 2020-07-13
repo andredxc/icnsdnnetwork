@@ -5,7 +5,8 @@ from ndn.experiments.experiment import Experiment
 
 c_strEportCmd = 'export HOME=/home/osboxes/ && '
 c_strAppName  = 'C2Data'
-c_strLogFile  = '/home/osboxes/random_talks.log'
+c_strLogFile  = '/home/osboxes/github/icnsdnnetwork/execution/logs/random_talks.log'
+
 
 class RandomTalks(Experiment):
 
@@ -13,6 +14,7 @@ class RandomTalks(Experiment):
       """
       Constructor. Meh
       """
+      self.logFile = None
       Experiment.__init__(self, args)
 
    def setup(self):
@@ -20,7 +22,7 @@ class RandomTalks(Experiment):
       Setup experiment
       """
       for node in self.net.hosts:
-         self.log('Node: ' + str(node))
+         self.log('setup', 'Node: ' + str(node))
 
    def run(self):
       """
@@ -35,7 +37,7 @@ class RandomTalks(Experiment):
 
       # Other parameters
       nHosts       = len(self.net.hosts)
-      hshProducers = {}
+      lstProducers = []
 
       # Select producer/consumer pairs
       for nIteration in range(0, nInterests):
@@ -43,16 +45,15 @@ class RandomTalks(Experiment):
          self.log('run', 'Iteration ' + str(nIteration) + '/' + str(nInterests-1) + '--------------------')
          # Generate producer/consumer pair
          nCon        = randint(0, nHosts-1)
+         nProd       = self.randomHostPair(nCon, nHosts)
          strInterest = self.randomDataInfoFromPool(nPayloadQtd, nPoolSize)
 
-         if (strInterest not in hshProducers):
-            # No producer has yet been assigned to this data
-            nProd = self.randomHostPair(nCon, nHosts)
-            hshProducers[strInterest] = nProd
+         if (nProd not in lstProducers):
+            # This producer has not yet been initialized
+            lstProducers.append(nProd)
             bNewProducer = True
          else:
             # Data already has a producer
-            nProd = hshProducers[strInterest]
             bNewProducer = False
 
          producer    = self.net.hosts[nProd]
@@ -63,7 +64,7 @@ class RandomTalks(Experiment):
 
          if (bNewProducer):
             # Producer has not been initialized yet
-            self.log('run', 'producer ' + strFilter + ' &')
+            self.log('run', 'instantiating new producer ' + strFilter + ' &')
             producer.cmd('producer ' + strFilter + ' &')
 
          # Run consumer for the specific data
@@ -71,10 +72,14 @@ class RandomTalks(Experiment):
          self.log('run', 'Selected pair, nProducer=' + str(nProd) + '; strProducer=' + strProducer +
             '; nConsumer=' + str(nCon) + '; strConsumer=' + strConsumer + '; interest=' + strInterest)
 
-         self.log('run', 'consumer ' + strInterest + ' ' + strConsumer + ' &')
+         self.log('run', 'instantiating new consumer ' + strInterest + ' ' + strConsumer + ' &')
          consumer.cmd('consumer ' + strInterest + ' ' + strConsumer + ' &')
 
-         time.sleep(2) # Maybe
+         # time.sleep(2) # Maybe
+
+      # Close log file
+      if (self.logFile):
+         self.logFile.close()
 
    def randomHostPair(self, nOriginal, nHosts):
       """
@@ -129,7 +134,7 @@ class RandomTalks(Experiment):
       if (not self.logFile):
          self.logFile = open(c_strLogFile, 'w')
 
-      strLine = '[RandomTalks.' + strFunction + '] ' + strLine
+      strLine = '[RandomTalks.' + strFunction + '] ' + strContent + '\n'
       self.logFile.write(strLine)
       print(strLine)
 
