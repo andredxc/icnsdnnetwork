@@ -1,5 +1,6 @@
 import sys
 import time
+from DataManager import *
 from random import randint
 from ndn.experiments.experiment import Experiment
 
@@ -14,7 +15,10 @@ class RandomTalks(Experiment):
       """
       Constructor. Meh
       """
-      self.logFile = None
+      self.logFile         = None
+      self.lstProducers    = []
+      self.DataManager     = DataManger()
+      self.nMissionMinutes = 0
       Experiment.__init__(self, args)
 
    def setup(self):
@@ -23,6 +27,10 @@ class RandomTalks(Experiment):
       """
       for node in self.net.hosts:
          self.log('setup', 'Node: ' + str(node))
+         lstHostNames = str(node)
+
+      self.lstDataQueue = self.DataManager.generateDataQueue(lstHostNames, self.nMissionMinutes)
+      self.lstDataQueue = self.DataManager.orderDataQueue(self.lstDataQueue)
 
    def run(self):
       """
@@ -39,93 +47,77 @@ class RandomTalks(Experiment):
       nHosts       = len(self.net.hosts)
       lstProducers = []
 
-      # Select producer/consumer pairs
-      for nIteration in range(0, nInterests):
+      sExperimentTimeSec = 100
+      sInitialTimeSec = time.monotonic()
+      sElapsedTimeSec = 0
+      nDataIndex      = 0
+      while ((sInitialTimeSec + sElapsedTimeSec) < sExperimentTimeSec):
+         # Send data until the end of the experiment
+         bShouldSendData = True
+         while (bShouldSendData and (nDataIndex < len(self.lstDataQueue))):
+            # Sweep queue and send data according to the elapsed time
+            sElapsedTimeMili = int(sElapsedTimeSec/1000)
+            pDataBuff = self.lstDataQueue[nDataIndex]
 
-         self.log('run', 'Iteration ' + str(nIteration) + '/' + str(nInterests-1) + '--------------------')
-         # Generate producer/consumer pair
-         nCon        = randint(0, nHosts-1)
-         nProd       = self.randomHostPair(nCon, nHosts)
-         strInterest = self.randomDataInfoFromPool(nPayloadQtd, nPoolSize)
+            if(pDataBuff[0] <= sElapsedTimeMili):
+               # Send data
+               self.send(pDataBuff)
+            else:
+               # Wait before sending next data
+               bShouldSendData = False
 
-         if (nProd not in lstProducers):
-            # This producer has not yet been initialized
-            lstProducers.append(nProd)
-            bNewProducer = True
-         else:
-            # Data already has a producer
-            bNewProducer = False
-
-         producer    = self.net.hosts[nProd]
-         consumer    = self.net.hosts[nCon]
-         strProducer = str(producer)
-         strConsumer = str(consumer)
-         strFilter   = '/' + c_strAppName + '/' + strProducer + '/'
-
-         if (bNewProducer):
-            # Producer has not been initialized yet
-            self.log('run', 'instantiating new producer ' + strFilter + ' &')
-            producer.cmd('producer ' + strFilter + ' &')
-
-         # Run consumer for the specific data
-         strInterest = strFilter + strInterest
-         self.log('run', 'Selected pair, nProducer=' + str(nProd) + '; strProducer=' + strProducer +
-            '; nConsumer=' + str(nCon) + '; strConsumer=' + strConsumer + '; interest=' + strInterest)
-
-         self.log('run', 'instantiating new consumer ' + strInterest + ' ' + strConsumer + ' &')
-         consumer.cmd('consumer ' + strInterest + ' ' + strConsumer + ' &')
-
-         # time.sleep(2) # Maybe
+         # Wait until next data is ready
+         nDataIndex     += 1
+         time.sleep(self.lstDataQueue[nDataIndex][0] * 1000)
+         sElapsedTimeSec = time.monotonic() - sInitialTimeSec
 
       # Close log file
       if (self.logFile):
          self.logFile.close()
 
-   def randomHostPair(self, nOriginal, nHosts):
+   def send(self, pDataPackage):
       """
-      Random host index different from nOriginal
+      Issues MiniNDN commands for sender and receiver of a data package
       """
-      nPair = 0
-      if (nHosts > 1):
-         while (True):
-            nPair = randint(0, nHosts-1)
-            if (nPair != nOriginal):
-               return nPair
+      pDataPackage.strOrig
+      pDataPackage.strDest
+      pDataPackage.getInterestFilter()
+
+      nProducer = self.findHostByName(pDataPackage.strOrig)
+      nConsumer = self.findHostByName(pDataPackage.strDest)
+
+      if((nProducer >= 0) and (nConsumer >= 0)):
+         # Valid consumer and producer
+         if(nProducer not in self.lstProducers):
+            # Producer has not yet been instantiated
+            strFilter = self.getFilterByHostname(pDataPackage.strOrig)
+            self.log('send', 'instantiating new producer ' + strFilter + ' &')
+            producer.cmd('producer ' + strFilter + ' &')
+            self.lstProducers.append(nProducer)
+
+         pProducer = self.net.hosts[nProducer]
+         pConsumer = self.net.hosts[nConsumer]
+
+         self.log('send', 'instantiating new consumer ' + strInterest + ' ' + strConsumer + ' &')
+         consumer.cmd('consumer %s &' % (pDataPackage.getInterest()))
+         self.log('send', 'Sending %s' % pDataPackage)
       else:
-         return 0
+         raise Exception('[send] ERROR, invalid origin or destination hosts in data package=%s' % pDataPackage)
 
-   def selectProducerConsumer(self, nHosts):
+   def findHostByName(self, strName):
       """
-      Randomly select a non-equal producer-consumer pair
+      Finds a host in MiniNDN self.net.hosts by name
       """
-      if(nHosts > 1):
-         bDone     = False
-         nConsumer = randint(0, nHosts-1)
-         while (not bDone):
-            # Find non-equal pair for consumer
-            nProducer = randint(0, nHosts-1)
-            if(nProducer != nConsumer):
-               bDone = True
-         # Return non-equal pair
-         return (nProducer, nConsumer)
-      else:
-         return (0,0)
+      for (nIndex, pNode) in enumerate(self.net.hosts):
+         if (str(pNode) == strName):
+            return nIndex
+      return -1
 
-   def randomDataInfoFromPool(self, nPayloadQtd, nPoolSize):
+   def getFilterByHostname(self, strName):
       """
-      Generate C2 data info.
+      Creates interest filter base on the producer`s name
       """
-      if (nPoolSize % nPayloadQtd != 0):
-         self.log('randomDataInfoFromPool', 'Payload times not evenly distributed ' +
-            'poolSize=' + str(nPoolSize) + '; payloadQtd=' + str(nPayloadQtd))
-         raise Exception
-
-      # Determine which package it is
-      nPackagesPerType = nPoolSize / nPayloadQtd
-      nPackageID       = randint(0, nPackagesPerType-1)
-      nPackageType     = randint(0, nPayloadQtd-1)
-      strPackageName   = 'C2Data-' + str(nPackageID) + '-Type' + str(nPackageType)
-      return strPackageName
+      return '/' + c_strAppName + '/' + strName + '/'
 
    def log(self, strFunction, strContent):
       """

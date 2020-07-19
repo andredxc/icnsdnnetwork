@@ -14,7 +14,7 @@ def main():
 
     nCount = 0
     for node in lstDataQueue:
-        print(node)
+        print('%s ms, %s' % (node[0], node[1]))
         nCount += 1
     print('Total data queue size: %s' %(nCount))
 
@@ -36,22 +36,26 @@ class DataManager:
         Generates an unordered queue with packages and send time
         """
         # TODO: Define destination hosts for data packages
-        strDest = 'TBD'
+        strDest      = 'TBD'
+        lstDataQueue = []
         for strHost in lstHosts:
             # Generate data from each host
             if(strHost[0] == 'd'):
                 # Drone
                 logging.info('[generateDataQueue] Node type drone')
-                lstDataQueue = self.lstDataTypes[0].generateDataQueue(strHost, strDest, nMissionMinutes)
+                self.lstDataTypes[0].generateDataQueue(strHost, strDest, nMissionMinutes, lstDataQueue)
             elif(strHost[0] == 'h'):
                 # Human
                 logging.info('[generateDataQueue] Node type human')
+                self.lstDataTypes[0].generateDataQueue(strHost, strDest, nMissionMinutes, lstDataQueue)
             elif(strHost[0] == 's'):
                 # Sensor
                 logging.info('[generateDataQueue] Node type sensor')
+                self.lstDataTypes[0].generateDataQueue(strHost, strDest, nMissionMinutes, lstDataQueue)
             elif(strHost[0] == 'v'):
                 # Vehicle
                 logging.info('[generateDataQueue] Node type vehicle')
+                self.lstDataTypes[0].generateDataQueue(strHost, strDest, nMissionMinutes, lstDataQueue)
             else:
                 # Unrecognized host type
                 logging.error('[generateDataQueue] Unrecognized host type ' + strHost)
@@ -77,21 +81,22 @@ class C2DataType:
         self.nPayloadSize = nSize    # Package payload size
         self.nCurID       = 0        # Used for generating new packages
 
-    def generateDataQueue(self, strHost, strDest, nMissionMinutes):
+    def generateDataQueue(self, strHost, strDest, nMissionMinutes, lstDataQueue):
         """
         Generates the data queue for a host
         """
         nMissionSeconds = nMissionMinutes * 60
         nSecondsElapsed = 0
-        lstData         = []
+        nCount          = 0
         while (nSecondsElapsed <= nMissionSeconds):
             # Create data and add to list with miliseconds offset
             data = DataPackage(self.nType, self.nCurID, self.nPayloadSize, strHost, strDest)
-            lstData.append([nSecondsElapsed*1000, data])
-            self.nCurID += 1
-            nSecondsElapsed = nSecondsElapsed + self.nPeriodSec
+            lstDataQueue.append([nSecondsElapsed*1000, data])
+            self.nCurID     += 1
+            nCount          += 1
+            nSecondsElapsed  = nSecondsElapsed + self.nPeriodSec
 
-        return lstData
+        return nCount
 
 
 class DataPackage:
@@ -110,7 +115,7 @@ class DataPackage:
         """
         Repr
         """
-        return 'DataPackage_Type' + str(self.nType) + '_ID' + str(self.nID)
+        return '<DataPackage_Type%s_ID%s (%s -> %s)>' %(self.nType, self.nID, self.strOrig, self.strDest)
 
     def getInterest(self):
         """
