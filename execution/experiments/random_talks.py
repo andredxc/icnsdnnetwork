@@ -30,7 +30,6 @@ class RandomTalks(Experiment):
          lstHostNames = str(node)
 
       self.lstDataQueue = self.DataManager.generateDataQueue(lstHostNames, self.nMissionMinutes)
-      self.lstDataQueue = self.DataManager.orderDataQueue(self.lstDataQueue)
 
    def run(self):
       """
@@ -62,13 +61,13 @@ class RandomTalks(Experiment):
             if(pDataBuff[0] <= sElapsedTimeMili):
                # Send data
                self.send(pDataBuff)
+               # Wait until next data is ready
+               time.sleep(self.lstDataQueue[nDataIndex+1][0] * 1000)
             else:
                # Wait before sending next data
                bShouldSendData = False
 
-         # Wait until next data is ready
-         nDataIndex     += 1
-         time.sleep(self.lstDataQueue[nDataIndex][0] * 1000)
+         nDataIndex += 1
          sElapsedTimeSec = time.monotonic() - sInitialTimeSec
 
       # Close log file
@@ -131,3 +130,7 @@ class RandomTalks(Experiment):
       print(strLine)
 
 Experiment.register("random-talks", RandomTalks)
+
+
+
+# Batata
