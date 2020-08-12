@@ -1,0 +1,204 @@
+[main] reading results for node=d
+[readResultFile] (/C2Data/a/C2Data-9-Type0, 1312.0000, NACK
+)
+[readResultFile] (/C2Data/c/C2Data-9-Type1, 9165.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-3-Type4, 1416.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-0-Type4, 14539.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-4-Type2, 7440.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-1-Type1, 1169.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-5-Type1, 6577.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-7-Type2, 1253.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-9-Type2, 1690.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-6-Type4, 4244.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-9-Type1, 972.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-9-Type2, 15170.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-0-Type4, 11781.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-4-Type0, 745.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-7-Type1, 23743.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-9-Type4, 6823.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-7-Type3, 780.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-1-Type1, 2064.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-0-Type2, 8240.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-9-Type1, 5062.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-5-Type2, 966.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-9-Type1, 2528.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-5-Type5, 3592.0000, DATA
+)
+[main] reading results for node=a
+[readResultFile] (/C2Data/d/C2Data-6-Type2, 14918.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-5-Type5, 11053.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-5-Type4, 18313.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-3-Type5, 7847.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-2-Type3, 15733.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-6-Type1, 1031.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-5-Type2, 4153.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-4-Type1, 11111.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-7-Type5, 11720.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-3-Type0, 1079.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-9-Type3, 4843.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-7-Type2, 6662.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-4-Type5, 999.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-1-Type3, 1817.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-8-Type1, 1398.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-9-Type2, 3511.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-5-Type2, 10746.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-5-Type1, 4744.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-3-Type2, 8014.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-1-Type2, 627.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-3-Type2, 531.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-8-Type4, 2013.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-9-Type3, 2208.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-1-Type4, 2439.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-6-Type3, 4482.0000, DATA
+)
+[main] reading results for node=b
+[readResultFile] (/C2Data/a/C2Data-0-Type5, 623.0000, NACK
+)
+[readResultFile] (/C2Data/a/C2Data-3-Type4, 647.0000, NACK
+)
+[readResultFile] (/C2Data/a/C2Data-3-Type4, 9550.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-1-Type3, 5267.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-7-Type1, 1552.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-5-Type1, 815.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-2-Type5, 773.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-2-Type1, 1456.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-9-Type5, 21511.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-7-Type1, 17094.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-5-Type3, 10373.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-0-Type5, 9251.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-2-Type2, 13945.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-6-Type1, 28046.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-2-Type5, 3335.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-1-Type4, 21051.0000, DATA
+)
+[readResultFile] (/C2Data/c/C2Data-3-Type1, 13975.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-7-Type1, 6490.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-9-Type3, 16418.0000, DATA
+)
+[main] reading results for node=c
+[readResultFile] (/C2Data/a/C2Data-8-Type1, 7340.0000, NACK
+)
+[readResultFile] (/C2Data/d/C2Data-6-Type5, 26173.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-2-Type3, 13561.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-0-Type1, 1875.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-8-Type4, 10702.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-3-Type1, 18091.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-7-Type1, 1273.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-1-Type5, 15373.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-5-Type3, 7862.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-4-Type5, 9634.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-9-Type3, 1710.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-1-Type1, 986.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-5-Type5, 1229.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-2-Type0, 15017.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-9-Type4, 1715.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-3-Type5, 3075.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-9-Type2, 8449.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-8-Type2, 3530.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-4-Type2, 24051.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-0-Type3, 25091.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-3-Type5, 10138.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-4-Type4, 923.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-5-Type1, 3600.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-5-Type2, 19811.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-4-Type1, 20259.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-3-Type3, 1119.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-7-Type5, 2956.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-3-Type2, 22388.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-2-Type0, 1896.0000, DATA
+)
+[readResultFile] (/C2Data/a/C2Data-0-Type4, 4150.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-1-Type0, 1173.0000, DATA
+)
+[readResultFile] (/C2Data/b/C2Data-4-Type3, 2097.0000, DATA
+)
+[readResultFile] (/C2Data/d/C2Data-5-Type1, 562.0000, DATA
+)

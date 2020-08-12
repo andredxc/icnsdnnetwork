@@ -1,0 +1,39 @@
+NFD version 0.7.0-commit-34b2b57 starting
+Built with GNU C++ version 7.4.0, with GNU libstdc++ version 20181206, with Boost version 1.65.1, with libpcap version 1.8.1, without WebSocket++, with ndn-cxx version 0.7.0-commit-f601e19
+1597198642.536807  INFO: [nfd.FaceTable] Added face id=255 remote=null:// local=null://
+1597198642.536847  INFO: [nfd.FaceTable] Added face id=254 remote=contentstore:// local=contentstore://
+1597198642.536913  INFO: [nfd.CsPolicy] setLimit 10
+1597198642.536962  INFO: [nfd.StrategyChoice] setDefaultStrategy /localhost/nfd/strategy/best-route/%FD%05
+1597198642.537026  INFO: [nfd.FaceTable] Added face id=1 remote=internal:// local=internal://
+1597198642.537380  WARN: [nfd.CommandAuthenticator] 'certfile any' is intended for demo purposes only and SHOULD NOT be used in production environments
+1597198642.537556  INFO: [nfd.StrategyChoice] changeStrategy(/ndn/broadcast) /localhost/nfd/strategy/best-route/%FD%05 -> /localhost/nfd/strategy/multicast/%FD%03
+1597198642.537585  INFO: [nfd.StrategyChoice] changeStrategy(/localhost) /localhost/nfd/strategy/best-route/%FD%05 -> /localhost/nfd/strategy/multicast/%FD%03
+1597198642.537601  INFO: [nfd.StrategyChoice] changeStrategy(/localhost/nfd) /localhost/nfd/strategy/multicast/%FD%03 -> /localhost/nfd/strategy/best-route/%FD%05
+1597198642.537614  INFO: [nfd.CsPolicy] setLimit 65536
+1597198642.537617  INFO: [nfd.CsPolicy] setLimit 65536
+1597198642.537646  INFO: [nfd.EthernetFactory] enabling multicast on 01:00:5e:00:17:aa
+1597198642.537675  INFO: [nfd.TcpChannel] [tcp4://0.0.0.0:6363] Creating channel
+1597198642.537705  INFO: [nfd.TcpChannel] [tcp6://[::]:6363] Creating channel
+1597198642.537739  INFO: [nfd.UdpChannel] [udp4://0.0.0.0:6363] Creating channel
+1597198642.537760  INFO: [nfd.UdpChannel] [udp6://[::]:6363] Creating channel
+1597198642.537774  INFO: [nfd.UdpFactory] enabling multicast on 224.0.23.170:56363
+1597198642.537787  INFO: [nfd.UdpFactory] enabling multicast on [ff02::1234]:56363
+1597198642.537813  INFO: [nfd.UnixStreamChannel] [unix:///run/nfd.sock] Creating channel
+1597198642.537914 FATAL: [nfd.Main] ../daemon/face/unix-stream-channel.cpp(86): Throw in function listen
+Dynamic exception type: boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<nfd::face::UnixStreamChannel::Error> >
+std::exception::what: Socket file at /run/nfd.sock belongs to another NFD process
+===== Stacktrace =====
+ 0# nfd::face::UnixStreamChannel::listen(std::function<void (std::shared_ptr<nfd::face::Face> const&)> const&, std::function<void (unsigned int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)> const&, int) at ../daemon/face/unix-stream-channel.cpp:86
+ 1# nfd::face::UnixStreamFactory::doProcessConfig(boost::optional<boost::property_tree::basic_ptree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&>, nfd::face::FaceSystem::ConfigContext&) at ../daemon/face/unix-stream-factory.cpp:86
+ 2# nfd::face::ProtocolFactory::processConfig(boost::optional<boost::property_tree::basic_ptree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&>, nfd::face::FaceSystem::ConfigContext&) at ../daemon/face/protocol-factory.cpp:77
+ 3# nfd::face::FaceSystem::processConfig(boost::property_tree::basic_ptree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&, bool, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) at ../daemon/face/face-system.cpp:126
+ 4# nfd::ConfigFile::process(bool, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const at ../daemon/common/config-file.cpp:127
+ 5# nfd::ConfigFile::parse(std::istream&, bool, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) at ../daemon/common/config-file.cpp:113
+ 6# nfd::ConfigFile::parse(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool) at ../daemon/common/config-file.cpp:91
+ 7# nfd::Nfd::initializeManagement() at ../daemon/nfd.cpp:169
+ 8# nfd::Nfd::initialize() at ../daemon/nfd.cpp:89
+ 9# main at ../daemon/main.cpp:336
+10# 0x00007F528F6C8B97 in /lib/x86_64-linux-gnu/libc.so.6
+11# 0x000055E3252197AA in nfd
+======================
+

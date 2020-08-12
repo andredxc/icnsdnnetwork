@@ -31,6 +31,9 @@ class RandomTalks(Experiment):
 
       self.lstDataQueue = self.DataManager.generateDataQueue(lstHostNames, self.nMissionMinutes)
 
+      for nIndex, node in enumerate(self.lstDataQueue):
+         self.log('setup', 'Node[' + nIndex + ']: ' + node[0] + ', ' + node[1])
+
    def run(self):
       """
       Experiment routine

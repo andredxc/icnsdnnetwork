@@ -23,7 +23,7 @@ def readResultFile(File):
         else:
             print('[readResultFile] (' + lstContents[0] + ', ' + lstContents[1] + ', ' + lstContents[2] + ')')
             lstLines.append(lstContents)
-    
+
     return lstLines
 
 # Save all directories as node names
@@ -33,12 +33,12 @@ hshNodes = {}
 # Visit nodes (directories) one by one
 for strNode in lstNodes:
     # Read result file for each node
-    try:
-        File = open(c_strBasePath + '/' + strNode + '/' + c_strFileName, 'r')
+    pFile = open(c_strBasePath + '/' + strNode + '/' + c_strFileName, 'r')
+    if (pFile):
         print('[main] reading results for node=' + strNode)
-        hshNodes[strNode] = readResultFile(File)
-        close(File)
-    except:
+        hshNodes[strNode] = readResultFile(pFile)
+        pFile.close()
+    else:
         print('[main] ERROR reading information for node=' + strNode)
 
 
